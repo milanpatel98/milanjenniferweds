@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  --paper: #faf8f5;
+  --brown: #5c2018;
+  --brown-20: rgba(92, 32, 24, 0.2);
+  --brown-15: rgba(92, 32, 24, 0.15);
+  --brown-08: rgba(92, 32, 24, 0.08);
+  --font-script: "Great Vibes", cursive;
+  --font-display: "Cormorant Garamond", serif;
+  --font-body: "Lora", serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--brown);
+  font-family: var(--font-body);
+}
+
+/* Prevent iOS tap highlight from looking out of place */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
