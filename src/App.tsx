@@ -4,15 +4,15 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { COPY, type Lang } from './content'
 
 const ASSETS = {
-  curtainClosed: '/assets/curtain-closed-Bpkadld4.jpg',
-  curtainOpen: '/assets/curtain-open-C9MqdT6G.jpg',
-  curtainVideo: '/assets/curtain-video-BAKLj3Y5.mp4',
-  scratchGold: '/assets/scratch-gold-DQrdz0lH.png',
-  menuFrame: '/assets/menu-frame-BFE5kCs7.png',
-  venueIllustration: '/assets/venue-illustration-DebdGS8I.png',
-  dresscodeIllustration: '/assets/dresscode-illustration-BT5yPEQh.png',
-  giftIcon: '/assets/gift-icon-BssCdzah.png',
-  rsvpConfirmation: '/assets/rsvp-confirmation.webm',
+  curtainClosed: 'assets/curtain-closed-Bpkadld4.jpg',
+  curtainOpen: 'assets/curtain-open-C9MqdT6G.jpg',
+  curtainVideo: 'assets/curtain-video-BAKLj3Y5.mp4',
+  scratchGold: 'assets/scratch-gold-DQrdz0lH.png',
+  menuFrame: 'assets/menu-frame-BFE5kCs7.png',
+  venueIllustration: 'assets/venue-illustration-DebdGS8I.png',
+  dresscodeIllustration: 'assets/dresscode-illustration-BT5yPEQh.png',
+  giftIcon: 'assets/gift-icon-BssCdzah.png',
+  rsvpConfirmation: 'assets/rsvp-confirmation.webm',
 } as const
 
 function useScrolled(threshold = 100) {
@@ -308,7 +308,7 @@ function IntroCurtains({ t }: { t: (typeof COPY)[Lang] }) {
 
   return (
     <section className="relative grid min-h-screen place-items-center overflow-hidden">
-      <audio ref={audioRef} src="/assets/intro-music.mp3" preload="auto" />
+      <audio ref={audioRef} src="assets/intro-music.mp3" preload="auto" />
       <img
         src={phase === 'open' ? ASSETS.curtainOpen : ASSETS.curtainClosed}
         alt=""
