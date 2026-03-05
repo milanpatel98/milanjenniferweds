@@ -13,7 +13,7 @@ export type Copy = {
   reveal: {
     title: string
     subtitle: string
-    hint: string
+    completeMessage: string
     parts: { day: string; month: string; year: string }
   }
   countdown: {
@@ -89,7 +89,7 @@ export const COPY: Record<Lang, Copy> = {
     reveal: {
       title: 'Reveal',
       subtitle: 'SCRATCH TO DISCOVER THE DATE',
-      hint: 'Scratch all three circles to continue',
+      completeMessage: "We're getting married",
       parts: { day: '06', month: 'June', year: '2026' },
     },
     countdown: {
@@ -179,7 +179,7 @@ export const COPY: Record<Lang, Copy> = {
     reveal: {
       title: 'Revelación',
       subtitle: 'RASPA PARA DESCUBRIR LA FECHA',
-      hint: 'Raspa los tres círculos para continuar',
+      completeMessage: 'Nos casamos',
       parts: { day: '06', month: 'Junio', year: '2026' },
     },
     countdown: {

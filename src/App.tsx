@@ -185,14 +185,29 @@ function ScratchCircle({ value, isRevealed, onReveal, ariaLabel }: ScratchCircle
 
 function App() {
   const [lang, setLang] = useState<Lang>('en')
+  const [introComplete, setIntroComplete] = useState(false)
   const t = COPY[lang]
   const scrolled = useScrolled(80)
+
+  useEffect(() => {
+    if (introComplete) {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+    } else {
+      document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
+    }
+    return () => {
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+    }
+  }, [introComplete])
 
   return (
     <div className="min-h-screen bg-[color:var(--paper)] text-[color:var(--brown)]">
       <TopBar lang={lang} setLang={setLang} scrolled={scrolled} label={t.topbar.label} />
 
-      <IntroCurtains t={t} />
+      <IntroCurtains t={t} onIntroComplete={() => setIntroComplete(true)} />
 
       <main className="relative">
         <RevealSection t={t} />
@@ -269,7 +284,7 @@ function TopBar({
   )
 }
 
-function IntroCurtains({ t }: { t: (typeof COPY)[Lang] }) {
+function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntroComplete?: () => void }) {
   const [phase, setPhase] = useState<'closed' | 'opening' | 'open'>('closed')
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -312,7 +327,10 @@ function IntroCurtains({ t }: { t: (typeof COPY)[Lang] }) {
             src={ASSETS.curtainVideo}
             muted
             playsInline
-            onEnded={() => setPhase('open')}
+            onEnded={() => {
+              setPhase('open')
+              onIntroComplete?.()
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -452,22 +470,13 @@ function RevealSection({ t }: { t: (typeof COPY)[Lang] }) {
           />
         </div>
 
-        <FadeIn delay={0.2}>
-          <div className="mt-8 font-display text-[10px] tracking-[0.35em] opacity-70 md:text-xs">
-            {t.reveal.hint}
-          </div>
-          <div className="mt-3">
-            <span
-              className={[
-                'inline-flex items-center rounded-full border px-4 py-2 font-display text-[10px] tracking-[0.28em] transition',
-                'border-[color:var(--brown-15)] bg-[color:var(--brown-08)]',
-                all ? 'opacity-100' : 'opacity-50',
-              ].join(' ')}
-            >
-              {t.reveal.parts.day} {t.reveal.parts.month} {t.reveal.parts.year}
-            </span>
-          </div>
-        </FadeIn>
+        {all && (
+          <FadeIn delay={0.2}>
+            <div className="mt-14 font-script text-2xl text-[color:var(--brown)] md:mt-16 md:text-3xl lg:text-4xl">
+              {t.reveal.completeMessage}
+            </div>
+          </FadeIn>
+        )}
       </div>
     </SectionShell>
   )
@@ -497,7 +506,7 @@ function CountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
   ]
 
   return (
-    <SectionShell className="pt-2">
+    <SectionShell className="pt-56 md:pt-72">
       <div className="mx-auto max-w-3xl text-center">
         <FadeIn>
           <div className="font-script text-5xl md:text-6xl">{t.countdown.title}</div>
