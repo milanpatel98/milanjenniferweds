@@ -235,15 +235,16 @@ function TopBar({
           <div
             className={[
               'flex items-center rounded-full border p-1 text-[11px] tracking-[0.25em] transition',
-              'border-[color:var(--brown-20)]',
-              scrolled ? 'bg-[color:rgba(250,248,245,0.85)] backdrop-blur' : 'bg-transparent',
+              'border-[color:var(--brown)]/30 bg-[color:rgba(250,248,245,0.92)] shadow-sm backdrop-blur',
             ].join(' ')}
           >
             <button
               type="button"
               className={[
-                'rounded-full px-3 py-2 transition',
-                lang === 'en' ? 'bg-[color:var(--brown)] text-white' : 'text-[color:var(--brown)]',
+                'rounded-full px-3 py-2 transition font-semibold',
+                lang === 'en'
+                  ? 'bg-[color:var(--brown)] text-white'
+                  : 'bg-[color:var(--brown-08)] text-[color:var(--brown)] hover:bg-[color:var(--brown)]/15',
               ].join(' ')}
               onClick={() => setLang('en')}
             >
@@ -252,8 +253,10 @@ function TopBar({
             <button
               type="button"
               className={[
-                'rounded-full px-3 py-2 transition',
-                lang === 'es' ? 'bg-[color:var(--brown)] text-white' : 'text-[color:var(--brown)]',
+                'rounded-full px-3 py-2 transition font-semibold',
+                lang === 'es'
+                  ? 'bg-[color:var(--brown)] text-white'
+                  : 'bg-[color:var(--brown-08)] text-[color:var(--brown)] hover:bg-[color:var(--brown)]/15',
               ].join(' ')}
               onClick={() => setLang('es')}
             >
@@ -327,22 +330,22 @@ function IntroCurtains({ t }: { t: (typeof COPY)[Lang] }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.05 }}
           >
-            <div className="font-display text-[10px] tracking-[0.35em] opacity-90 md:text-xs">
+            <div className="font-display text-[9px] tracking-[0.38em] text-[color:var(--brown)] opacity-95 md:text-[10px] md:tracking-[0.4em]">
               {t.intro.invited}
             </div>
-            <div className="mt-3 font-display text-[10px] tracking-[0.35em] opacity-90 md:text-xs">
+            <div className="mt-2 font-display text-[9px] tracking-[0.38em] text-[color:var(--brown)] opacity-95 md:mt-3 md:text-[10px] md:tracking-[0.4em]">
               {t.intro.celebrateWeddingOf}
             </div>
 
-            <div className="mt-5 font-script text-6xl leading-none md:text-7xl lg:text-8xl">
+            <div className="mt-6 font-script text-6xl leading-none text-[color:var(--brown)] md:mt-8 md:text-7xl lg:text-8xl">
               {t.intro.names.a}
             </div>
-            <div className="mt-2 font-script text-4xl leading-none md:text-5xl lg:text-6xl">&amp;</div>
-            <div className="mt-2 font-script text-6xl leading-none md:text-7xl lg:text-8xl">
+            <div className="mt-1 font-script text-3xl leading-none text-[color:var(--brown)] md:mt-2 md:text-4xl lg:text-5xl">&amp;</div>
+            <div className="mt-1 font-script text-6xl leading-none text-[color:var(--brown)] md:mt-2 md:text-7xl lg:text-8xl">
               {t.intro.names.b}
             </div>
 
-            <div className="mx-auto mt-6 max-w-xl font-body text-[13px] leading-6 opacity-90 md:text-[15px] md:leading-7">
+            <div className="mx-auto mt-6 max-w-[320px] font-display text-[10px] uppercase leading-[1.65] tracking-[0.12em] text-[color:var(--brown)] opacity-90 md:mt-8 md:max-w-[360px] md:text-[11px] md:leading-[1.7] md:tracking-[0.14em]">
               {t.intro.message}
             </div>
           </motion.div>
