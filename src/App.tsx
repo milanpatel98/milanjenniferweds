@@ -321,31 +321,31 @@ function IntroCurtains({ t }: { t: (typeof COPY)[Lang] }) {
       </AnimatePresence>
 
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-6 text-center">
-        <div className="h-16" />
+        <div className="h-24 md:h-16" />
 
         {phase === 'open' && (
           <motion.div
-            className="max-w-2xl"
+            className="max-w-2xl pt-6 md:pt-0"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.05 }}
           >
-            <div className="font-display text-[9px] tracking-[0.38em] text-[color:var(--brown)] opacity-95 md:text-[10px] md:tracking-[0.4em]">
+            <div className="font-display text-[8px] tracking-[0.32em] text-[color:var(--brown)] opacity-95 md:text-[10px] md:tracking-[0.4em]">
               {t.intro.invited}
             </div>
-            <div className="mt-2 font-display text-[9px] tracking-[0.38em] text-[color:var(--brown)] opacity-95 md:mt-3 md:text-[10px] md:tracking-[0.4em]">
+            <div className="mt-1.5 font-display text-[8px] tracking-[0.32em] text-[color:var(--brown)] opacity-95 md:mt-3 md:text-[10px] md:tracking-[0.4em]">
               {t.intro.celebrateWeddingOf}
             </div>
 
-            <div className="mt-6 font-script text-6xl leading-none text-[color:var(--brown)] md:mt-8 md:text-7xl lg:text-8xl">
+            <div className="mt-4 font-script text-5xl leading-none text-[color:var(--brown)] md:mt-8 md:text-7xl lg:text-8xl">
               {t.intro.names.a}
             </div>
-            <div className="mt-1 font-script text-3xl leading-none text-[color:var(--brown)] md:mt-2 md:text-4xl lg:text-5xl">&amp;</div>
-            <div className="mt-1 font-script text-6xl leading-none text-[color:var(--brown)] md:mt-2 md:text-7xl lg:text-8xl">
+            <div className="mt-0.5 font-script text-2xl leading-none text-[color:var(--brown)] md:mt-2 md:text-4xl lg:text-5xl">&amp;</div>
+            <div className="mt-0.5 font-script text-5xl leading-none text-[color:var(--brown)] md:mt-2 md:text-7xl lg:text-8xl">
               {t.intro.names.b}
             </div>
 
-            <div className="mx-auto mt-6 max-w-[320px] font-display text-[10px] uppercase leading-[1.65] tracking-[0.12em] text-[color:var(--brown)] opacity-90 md:mt-8 md:max-w-[360px] md:text-[11px] md:leading-[1.7] md:tracking-[0.14em]">
+            <div className="mx-auto mt-4 max-w-[260px] font-display text-[8px] uppercase leading-[1.6] tracking-[0.1em] text-[color:var(--brown)] opacity-90 md:mt-8 md:max-w-[360px] md:text-[11px] md:leading-[1.7] md:tracking-[0.14em]">
               {t.intro.message}
             </div>
           </motion.div>
@@ -353,15 +353,23 @@ function IntroCurtains({ t }: { t: (typeof COPY)[Lang] }) {
 
         <div className="mt-10" />
 
-        {phase !== 'open' ? (
-          <button
-            type="button"
-            onClick={onContinue}
-            className="rounded-full border border-[color:var(--brown-20)] bg-[color:rgba(250,248,245,0.85)] px-6 py-3 font-display text-xs tracking-[0.24em] text-[color:var(--brown)] backdrop-blur transition hover:bg-[color:rgba(92,32,24,0.06)]"
-          >
-            {t.intro.tapToContinue}
-          </button>
-        ) : (
+        <AnimatePresence mode="wait">
+          {phase === 'closed' && (
+            <motion.button
+              key="tap-to-continue"
+              type="button"
+              onClick={onContinue}
+              className="rounded-full border border-[color:var(--brown-20)] bg-[color:rgba(250,248,245,0.85)] px-6 py-3 font-display text-xs tracking-[0.24em] text-[color:var(--brown)] backdrop-blur transition hover:bg-[color:rgba(92,32,24,0.06)]"
+              initial={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+            >
+              {t.intro.tapToContinue}
+            </motion.button>
+          )}
+        </AnimatePresence>
+
+        {phase === 'open' ? (
           <motion.button
             type="button"
             className="mt-2 flex flex-col items-center gap-3 font-display text-[10px] tracking-[0.35em]"
@@ -388,7 +396,7 @@ function IntroCurtains({ t }: { t: (typeof COPY)[Lang] }) {
               </svg>
             </motion.div>
           </motion.button>
-        )}
+        ) : null}
       </div>
 
     </section>
