@@ -186,6 +186,7 @@ function ScratchCircle({ value, isRevealed, onReveal, ariaLabel }: ScratchCircle
 function App() {
   const [lang, setLang] = useState<Lang>('en')
   const [introComplete, setIntroComplete] = useState(false)
+  const [revealComplete, setRevealComplete] = useState(false)
   const t = COPY[lang]
   const scrolled = useScrolled(80)
 
@@ -210,14 +211,21 @@ function App() {
       <IntroCurtains t={t} onIntroComplete={() => setIntroComplete(true)} />
 
       <main className="relative">
-        <RevealSection t={t} />
-        <CountdownSection t={t} />
-        <VenueSection t={t} />
-        <MenuSection t={t} />
-        <DressCodeSection t={t} />
-        <GiftsSection t={t} />
-        <TransportSection t={t} />
-        <RsvpSection t={t} />
+        <RevealSection
+          t={t}
+          isComplete={revealComplete}
+          onRevealComplete={() => setRevealComplete(true)}
+        />
+        {revealComplete && (
+          <>
+            <VenueSection t={t} />
+            <MenuSection t={t} />
+            <DressCodeSection t={t} />
+            <GiftsSection t={t} />
+            <TransportSection t={t} />
+            <RsvpSection t={t} />
+          </>
+        )}
       </main>
     </div>
   )
@@ -288,6 +296,14 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
   const [phase, setPhase] = useState<'closed' | 'opening' | 'open'>('closed')
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const completedRef = useRef(false)
+
+  useEffect(() => {
+    if (phase === 'open' && !completedRef.current) {
+      completedRef.current = true
+      onIntroComplete?.()
+    }
+  }, [phase, onIntroComplete])
 
   const onContinue = async () => {
     if (phase !== 'closed') return
@@ -309,12 +325,12 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
   }
 
   return (
-    <section className="relative grid min-h-screen place-items-center overflow-hidden">
+    <section className="relative grid min-h-[100dvh] place-items-center overflow-x-hidden">
       <audio ref={audioRef} src="assets/intro-music.mp3" preload="auto" />
       <img
         src={phase === 'open' ? ASSETS.curtainOpen : ASSETS.curtainClosed}
         alt=""
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover object-[center_top] lg:object-center"
         draggable={false}
       />
 
@@ -323,13 +339,12 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
           <motion.video
             key="curtain-video"
             ref={videoRef}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover object-[center_top] lg:object-center"
             src={ASSETS.curtainVideo}
             muted
             playsInline
             onEnded={() => {
               setPhase('open')
-              onIntroComplete?.()
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -339,7 +354,7 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
       </AnimatePresence>
 
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-6 text-center">
-        <div className="h-56 md:h-16" />
+        <div className="h-72 md:h-16" />
 
         {phase === 'open' && (
           <motion.div
@@ -369,7 +384,7 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
           </motion.div>
         )}
 
-        <div className="mt-10" />
+        <div className="mt-2" />
 
         <AnimatePresence mode="wait">
           {phase === 'closed' && (
@@ -391,7 +406,11 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
           <motion.button
             type="button"
             className="mt-2 flex flex-col items-center gap-3 font-display text-[10px] tracking-[0.35em]"
-            onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+            onClick={() => {
+              const el = document.getElementById('reveal-section')
+              const top = el ? el.getBoundingClientRect().top + window.scrollY : window.innerHeight
+              window.scrollTo({ top, behavior: 'smooth' })
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -424,23 +443,55 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
 function SectionShell({
   children,
   className,
+  id,
 }: {
   children: ReactNode
   className?: string
+  id?: string
 }) {
   return (
-    <section className={['relative px-4 py-14 md:px-6 md:py-16', className ?? ''].join(' ')}>
+    <section id={id} className={['relative px-4 py-14 md:px-6 md:py-16', className ?? ''].join(' ')}>
       <div className="mx-auto max-w-5xl">{children}</div>
     </section>
   )
 }
 
-function RevealSection({ t }: { t: (typeof COPY)[Lang] }) {
+function RevealSection({
+  t,
+  isComplete,
+  onRevealComplete,
+}: {
+  t: (typeof COPY)[Lang]
+  isComplete: boolean
+  onRevealComplete?: () => void
+}) {
   const [revealed, setRevealed] = useState([false, false, false])
   const all = revealed.every(Boolean)
+  const completedRef = useRef(false)
+  const [showCountdown, setShowCountdown] = useState(false)
+
+  useEffect(() => {
+    if (all && !completedRef.current) {
+      completedRef.current = true
+      onRevealComplete?.()
+    }
+  }, [all, onRevealComplete])
+
+  useEffect(() => {
+    if (!all) {
+      setShowCountdown(false)
+      return
+    }
+    // Wait for most of the \"We're getting married\" fade-in, then show countdown shortly after.
+    const id = window.setTimeout(() => setShowCountdown(true), 400)
+    return () => window.clearTimeout(id)
+  }, [all])
 
   return (
-    <SectionShell>
+    <SectionShell
+      id="reveal-section"
+      className={['pt-28 pb-0 md:pt-40 md:pb-2', isComplete ? '' : 'min-h-[100dvh]'].join(' ')}
+    >
       <div className="mx-auto max-w-3xl text-center">
         <FadeIn>
           <div className="font-script text-5xl md:text-6xl">{t.reveal.title}</div>
@@ -470,12 +521,20 @@ function RevealSection({ t }: { t: (typeof COPY)[Lang] }) {
           />
         </div>
 
-        {all && (
-          <FadeIn delay={0.2}>
-            <div className="mt-14 font-script text-2xl text-[color:var(--brown)] md:mt-16 md:text-3xl lg:text-4xl">
-              {t.reveal.completeMessage}
-            </div>
-          </FadeIn>
+        <div className="mt-16 md:mt-20 lg:mt-24 flex items-center justify-center">
+          {all && (
+            <FadeIn delay={0.2}>
+              <div className="font-script text-2xl text-[color:var(--brown)] md:text-3xl lg:text-4xl">
+                {t.reveal.completeMessage}
+              </div>
+            </FadeIn>
+          )}
+        </div>
+
+        {showCountdown && (
+          <div className="mt-48 md:mt-64 lg:mt-72">
+            <CountdownSection t={t} />
+          </div>
         )}
       </div>
     </SectionShell>
@@ -506,30 +565,30 @@ function CountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
   ]
 
   return (
-    <SectionShell className="pt-56 md:pt-72">
-      <div className="mx-auto max-w-3xl text-center">
-        <FadeIn>
-          <div className="font-script text-5xl md:text-6xl">{t.countdown.title}</div>
-        </FadeIn>
+    <div id="countdown-section" className="mx-auto max-w-3xl text-center">
+      <FadeIn>
+        <div className="font-script text-5xl md:text-6xl">{t.countdown.title}</div>
+      </FadeIn>
 
-        <div className="mt-8 grid grid-cols-4 gap-4 md:gap-6">
-          {items.map((it, idx) => (
-            <FadeIn key={it.label} delay={0.08 * idx}>
-              <div className="rounded-2xl border border-[color:var(--brown-15)] bg-white/50 px-2 py-5 backdrop-blur">
-                <div className="font-display text-4xl leading-none md:text-5xl">{pad2(it.value)}</div>
-                <div className="mt-2 font-display text-[10px] tracking-[0.35em] opacity-80 md:text-xs">
-                  {it.label}
-                </div>
+      <div className="mt-6 grid grid-cols-4 gap-4 md:mt-8 md:gap-6">
+        {items.map((it, idx) => (
+          <FadeIn key={it.label} delay={0.08 * idx}>
+            <div className="rounded-2xl border border-[color:var(--brown-15)] bg-white/50 px-2 py-5 backdrop-blur">
+              <div className="font-display text-4xl leading-none md:text-5xl">{pad2(it.value)}</div>
+              <div className="mt-2 font-display text-[10px] tracking-[0.35em] opacity-80 md:text-xs">
+                {it.label}
               </div>
-            </FadeIn>
-          ))}
-        </div>
-
-        <FadeIn delay={0.2}>
-          <div className="mt-6 font-display text-[10px] tracking-[0.35em] opacity-70 md:text-xs">{t.countdown.until}</div>
-        </FadeIn>
+            </div>
+          </FadeIn>
+        ))}
       </div>
-    </SectionShell>
+
+      <FadeIn delay={0.2}>
+        <div className="mt-4 font-display text-[10px] tracking-[0.35em] opacity-70 md:mt-6 md:text-xs">
+          {t.countdown.until}
+        </div>
+      </FadeIn>
+    </div>
   )
 }
 
