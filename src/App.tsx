@@ -190,7 +190,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[color:var(--paper)] text-[color:var(--brown)]">
-      <TopBar lang={lang} setLang={setLang} scrolled={scrolled} label={t.topbar.label} buyNow={t.topbar.buyNow} />
+      <TopBar lang={lang} setLang={setLang} scrolled={scrolled} label={t.topbar.label} />
 
       <IntroCurtains t={t} />
 
@@ -213,13 +213,11 @@ function TopBar({
   setLang,
   scrolled,
   label,
-  buyNow,
 }: {
   lang: Lang
   setLang: (l: Lang) => void
   scrolled: boolean
   label: string
-  buyNow: string
 }) {
   return (
     <div className="pointer-events-none fixed inset-x-0 top-0 z-50">
@@ -234,20 +232,6 @@ function TopBar({
         </div>
 
         <div className="pointer-events-auto flex items-center gap-3">
-          <a
-            className={[
-              'rounded-full border px-4 py-2 text-xs tracking-[0.22em] transition',
-              'border-[color:var(--brown-20)] text-[color:var(--brown)]',
-              scrolled ? 'bg-[color:rgba(250,248,245,0.85)] backdrop-blur' : 'bg-transparent',
-              'hover:bg-[color:rgba(92,32,24,0.06)]',
-            ].join(' ')}
-            href="https://thedigitalyes.com"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {buyNow}
-          </a>
-
           <div
             className={[
               'flex items-center rounded-full border p-1 text-[11px] tracking-[0.25em] transition',
@@ -269,11 +253,11 @@ function TopBar({
               type="button"
               className={[
                 'rounded-full px-3 py-2 transition',
-                lang === 'it' ? 'bg-[color:var(--brown)] text-white' : 'text-[color:var(--brown)]',
+                lang === 'es' ? 'bg-[color:var(--brown)] text-white' : 'text-[color:var(--brown)]',
               ].join(' ')}
-              onClick={() => setLang('it')}
+              onClick={() => setLang('es')}
             >
-              IT
+              ES
             </button>
           </div>
         </div>
