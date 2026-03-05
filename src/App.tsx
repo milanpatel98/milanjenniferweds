@@ -15,6 +15,131 @@ const ASSETS = {
   rsvpConfirmation: 'assets/rsvp-confirmation.webm',
 } as const
 
+const WRAPPING_CONFETTI_COLORS = ['#FFFFFF', '#FFd700', '#d4af37', '#b8860b']
+
+function WrappingConfetti() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const resize = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resize()
+    window.addEventListener('resize', resize)
+
+    const timeDelta = 0.05
+    const xAmplitude = 0.5
+    const yAmplitude = 1
+    const xVelocity = 2
+    const yVelocity = 3
+
+    let time = 0
+    const confetti: Array<{
+      x: number
+      y: number
+      xSpeed: number
+      ySpeed: number
+      radius: number
+      tilt: number
+      color: string
+      phaseOffset: number
+    }> = []
+
+    for (let i = 0; i < 100; i++) {
+      const radius = Math.random() * 12 + 8
+      const tilt = (Math.random() * 10 - 5)
+      const xSpeed = Math.random() * xVelocity - xVelocity / 2
+      const ySpeed = Math.random() * yVelocity
+      const x = Math.random() * canvas.width
+      const y = Math.random() * canvas.height - canvas.height
+
+      confetti.push({
+        x,
+        y,
+        xSpeed,
+        ySpeed,
+        radius,
+        tilt,
+        color: WRAPPING_CONFETTI_COLORS[Math.floor(Math.random() * WRAPPING_CONFETTI_COLORS.length)]!,
+        phaseOffset: i,
+      })
+    }
+
+    const startTime = Date.now()
+    const maxDuration = 10000
+    const fadeDuration = 1800
+    const gravity = 0.15
+
+    let rafId: number | undefined
+    let fadeStartTime: number | null = null
+
+    function update() {
+      const now = Date.now()
+      const elapsed = now - startTime
+
+      if (elapsed > maxDuration && fadeStartTime === null) {
+        fadeStartTime = now
+      }
+
+      const fadeElapsed = fadeStartTime !== null ? now - fadeStartTime : 0
+      if (fadeStartTime !== null && fadeElapsed >= fadeDuration) {
+        if (rafId !== undefined) cancelAnimationFrame(rafId)
+        window.removeEventListener('resize', resize)
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        return
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      const isFading = fadeStartTime !== null
+      const fadeAlpha = isFading ? Math.max(0, 1 - fadeElapsed / fadeDuration) : 1
+      ctx.globalAlpha = fadeAlpha
+
+      confetti.forEach((piece) => {
+        piece.y += (Math.cos(piece.phaseOffset + time) + 1) * yAmplitude + piece.ySpeed
+        piece.x += Math.sin(piece.phaseOffset + time) * xAmplitude + piece.xSpeed
+        if (isFading) piece.ySpeed += gravity
+        if (piece.x < 0) piece.x = canvas.width
+        if (piece.x > canvas.width) piece.x = 0
+        if (piece.y > canvas.height) piece.y = 0
+        ctx.beginPath()
+        ctx.lineWidth = piece.radius / 2
+        ctx.strokeStyle = piece.color
+        ctx.moveTo(piece.x + piece.tilt + piece.radius / 4, piece.y)
+        ctx.lineTo(piece.x + piece.tilt, piece.y + piece.tilt + piece.radius / 4)
+        ctx.stroke()
+      })
+
+      ctx.globalAlpha = 1
+      time += timeDelta
+      rafId = requestAnimationFrame(update)
+    }
+    rafId = requestAnimationFrame(update)
+
+    return () => {
+      if (rafId !== undefined) cancelAnimationFrame(rafId)
+      window.removeEventListener('resize', resize)
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+    }
+  }, [])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      id="canvas-wrapping"
+      className="pointer-events-none fixed inset-0 z-40 h-full w-full"
+      aria-hidden
+    />
+  )
+}
+
 function useScrolled(threshold = 100) {
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
@@ -488,10 +613,12 @@ function RevealSection({
   }, [all])
 
   return (
-    <SectionShell
-      id="reveal-section"
-      className={['pt-28 pb-0 md:pt-40 md:pb-2', isComplete ? '' : 'min-h-[100dvh]'].join(' ')}
-    >
+    <>
+      {all && <WrappingConfetti />}
+      <SectionShell
+        id="reveal-section"
+        className={['pt-28 pb-0 md:pt-40 md:pb-2', isComplete ? '' : 'min-h-[100dvh]'].join(' ')}
+      >
       <div className="mx-auto max-w-3xl text-center">
         <FadeIn>
           <div className="font-script text-5xl md:text-6xl">{t.reveal.title}</div>
@@ -538,6 +665,7 @@ function RevealSection({
         )}
       </div>
     </SectionShell>
+    </>
   )
 }
 
