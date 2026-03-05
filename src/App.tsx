@@ -321,11 +321,11 @@ function IntroCurtains({ t }: { t: (typeof COPY)[Lang] }) {
       </AnimatePresence>
 
       <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-center px-6 text-center">
-        <div className="h-44 md:h-16" />
+        <div className="h-52 md:h-16" />
 
         {phase === 'open' && (
           <motion.div
-            className="max-w-2xl pt-14 md:pt-0"
+            className="max-w-2xl pt-16 md:pt-0"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.05 }}
