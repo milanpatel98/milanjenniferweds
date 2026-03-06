@@ -27,9 +27,12 @@ function WrappingConfetti() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
+    const canvasEl: HTMLCanvasElement = canvas
+    const ctx2D: CanvasRenderingContext2D = ctx
+
     const resize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
+      canvasEl.width = window.innerWidth
+      canvasEl.height = window.innerHeight
     }
     resize()
     window.addEventListener('resize', resize)
@@ -57,8 +60,8 @@ function WrappingConfetti() {
       const tilt = (Math.random() * 10 - 5)
       const xSpeed = Math.random() * xVelocity - xVelocity / 2
       const ySpeed = Math.random() * yVelocity
-      const x = Math.random() * canvas.width
-      const y = Math.random() * canvas.height - canvas.height
+      const x = Math.random() * canvasEl.width
+      const y = Math.random() * canvasEl.height - canvasEl.height
 
       confetti.push({
         x,
@@ -92,32 +95,32 @@ function WrappingConfetti() {
       if (fadeStartTime !== null && fadeElapsed >= fadeDuration) {
         if (rafId !== undefined) cancelAnimationFrame(rafId)
         window.removeEventListener('resize', resize)
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx2D.clearRect(0, 0, canvasEl.width, canvasEl.height)
         return
       }
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx2D.clearRect(0, 0, canvasEl.width, canvasEl.height)
 
       const isFading = fadeStartTime !== null
       const fadeAlpha = isFading ? Math.max(0, 1 - fadeElapsed / fadeDuration) : 1
-      ctx.globalAlpha = fadeAlpha
+      ctx2D.globalAlpha = fadeAlpha
 
       confetti.forEach((piece) => {
         piece.y += (Math.cos(piece.phaseOffset + time) + 1) * yAmplitude + piece.ySpeed
         piece.x += Math.sin(piece.phaseOffset + time) * xAmplitude + piece.xSpeed
         if (isFading) piece.ySpeed += gravity
-        if (piece.x < 0) piece.x = canvas.width
-        if (piece.x > canvas.width) piece.x = 0
-        if (piece.y > canvas.height) piece.y = 0
-        ctx.beginPath()
-        ctx.lineWidth = piece.radius / 2
-        ctx.strokeStyle = piece.color
-        ctx.moveTo(piece.x + piece.tilt + piece.radius / 4, piece.y)
-        ctx.lineTo(piece.x + piece.tilt, piece.y + piece.tilt + piece.radius / 4)
-        ctx.stroke()
+        if (piece.x < 0) piece.x = canvasEl.width
+        if (piece.x > canvasEl.width) piece.x = 0
+        if (piece.y > canvasEl.height) piece.y = 0
+        ctx2D.beginPath()
+        ctx2D.lineWidth = piece.radius / 2
+        ctx2D.strokeStyle = piece.color
+        ctx2D.moveTo(piece.x + piece.tilt + piece.radius / 4, piece.y)
+        ctx2D.lineTo(piece.x + piece.tilt, piece.y + piece.tilt + piece.radius / 4)
+        ctx2D.stroke()
       })
 
-      ctx.globalAlpha = 1
+      ctx2D.globalAlpha = 1
       time += timeDelta
       rafId = requestAnimationFrame(update)
     }
@@ -126,7 +129,7 @@ function WrappingConfetti() {
     return () => {
       if (rafId !== undefined) cancelAnimationFrame(rafId)
       window.removeEventListener('resize', resize)
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx2D.clearRect(0, 0, canvasEl.width, canvasEl.height)
     }
   }, [])
 
