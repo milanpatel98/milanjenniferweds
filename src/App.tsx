@@ -755,7 +755,7 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
             <div>{t.venue.address1}</div>
             <div>{t.venue.address2}</div>
           </div>
-          <div className="mt-5 font-display text-sm tracking-[0.18em] opacity-90">{t.venue.dateLine}</div>
+          <div className="mt-5 font-display text-base font-bold tracking-[0.18em] opacity-100">{t.venue.dateLine}</div>
           <div className="mt-1 font-display text-[11px] tracking-[0.24em] opacity-80">{t.venue.follow}</div>
         </FadeIn>
       </div>
