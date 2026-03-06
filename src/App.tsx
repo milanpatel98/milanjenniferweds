@@ -727,7 +727,7 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
   return (
     <SectionShell>
       <div className="grid gap-10 md:grid-cols-2 md:items-center">
-        <FadeIn className="order-2 md:order-1 text-center">
+        <FadeIn className="order-1 md:order-1 text-center">
           <div className="inline-flex items-center rounded-full border border-[color:var(--brown-15)] bg-[color:var(--brown-08)] px-4 py-2 font-display text-[10px] tracking-[0.28em]">
             {t.venue.extra}
           </div>
@@ -742,7 +742,7 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
           <div className="mt-1 font-display text-[11px] tracking-[0.24em] opacity-80">{t.venue.follow}</div>
         </FadeIn>
 
-        <FadeIn className="order-1 md:order-2" delay={0.1}>
+        <FadeIn className="order-2 md:order-2" delay={0.1}>
           <div className="mx-auto max-w-md">
             <img
               src={ASSETS.venueIllustration}
