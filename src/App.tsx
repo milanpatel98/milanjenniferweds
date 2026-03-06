@@ -726,23 +726,18 @@ function CountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
 function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
   return (
     <SectionShell>
-      <div className="grid gap-10 md:grid-cols-2 md:items-center">
-        <FadeIn className="order-1 md:order-1 text-center">
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center md:grid-rows-[auto_auto]">
+        {/* Mobile: 1st. Desktop: left col, top */}
+        <FadeIn className="order-1 text-center md:col-start-1 md:row-start-1">
           <div className="inline-flex items-center rounded-full border border-[color:var(--brown-15)] bg-[color:var(--brown-08)] px-4 py-2 font-display text-[10px] tracking-[0.28em]">
             {t.venue.extra}
           </div>
           <div className="mt-6 font-display text-[10px] tracking-[0.35em] opacity-80 md:text-xs">{t.venue.title}</div>
           <div className="mt-3 font-display text-[10px] tracking-[0.35em] opacity-80 md:text-xs">{t.venue.at}</div>
-          <div className="mt-4 font-script text-5xl leading-none md:text-6xl">{t.venue.name}</div>
-          <div className="mt-5 font-display text-[11px] tracking-[0.24em] opacity-85">
-            <div>{t.venue.address1}</div>
-            <div>{t.venue.address2}</div>
-          </div>
-          <div className="mt-5 font-display text-sm tracking-[0.18em] opacity-90">{t.venue.dateLine}</div>
-          <div className="mt-1 font-display text-[11px] tracking-[0.24em] opacity-80">{t.venue.follow}</div>
         </FadeIn>
 
-        <FadeIn className="order-2 md:order-2" delay={0.1}>
+        {/* Mobile: 2nd (after "AT", before venue name). Desktop: right col */}
+        <FadeIn className="order-2 md:col-start-2 md:row-span-2 md:row-start-1" delay={0.1}>
           <div className="mx-auto max-w-md">
             <img
               src={ASSETS.venueIllustration}
@@ -751,6 +746,17 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
               draggable={false}
             />
           </div>
+        </FadeIn>
+
+        {/* Mobile: 3rd. Desktop: left col, below title/at */}
+        <FadeIn className="order-3 text-center md:col-start-1 md:row-start-2">
+          <div className="mt-4 font-script text-5xl leading-none md:text-6xl md:mt-0">{t.venue.name}</div>
+          <div className="mt-5 font-display text-[11px] tracking-[0.24em] opacity-85">
+            <div>{t.venue.address1}</div>
+            <div>{t.venue.address2}</div>
+          </div>
+          <div className="mt-5 font-display text-sm tracking-[0.18em] opacity-90">{t.venue.dateLine}</div>
+          <div className="mt-1 font-display text-[11px] tracking-[0.24em] opacity-80">{t.venue.follow}</div>
         </FadeIn>
       </div>
     </SectionShell>
