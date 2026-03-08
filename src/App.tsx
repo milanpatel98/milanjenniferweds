@@ -14,6 +14,7 @@ const ASSETS = {
   giftIcon: 'assets/gift-icon-BssCdzah.png',
   rsvpConfirmation: 'assets/rsvp-confirmation.webm',
   topbarLogo: 'assets/ram.png',
+  weddingRings: 'assets/wedding-rings.jpg',
 } as const
 
 const WRAPPING_CONFETTI_COLORS = ['#FFFFFF', '#FFd700', '#d4af37', '#b8860b']
@@ -740,15 +741,15 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
       <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-center md:grid-rows-[auto_auto]">
         {/* Mobile: 1st. Desktop: left col, top */}
         <FadeIn className="order-1 text-center md:col-start-1 md:row-start-1">
-          <div className="inline-flex items-center rounded-full border border-[color:var(--brown-15)] bg-[color:var(--brown-08)] px-4 py-2 font-display text-[10px] tracking-[0.28em]">
-            {t.venue.extra}
+          <div className="inline-flex items-center justify-center rounded-full border border-[color:var(--brown-15)] bg-[color:var(--brown-08)] px-4 py-2">
+            <img src={ASSETS.weddingRings} alt="" className="h-6 w-auto select-none [mix-blend-mode:darken]" style={{ filter: 'contrast(1.15)' }} draggable={false} />
           </div>
           <div className="mt-6 font-display text-[10px] tracking-[0.35em] opacity-80 md:text-xs">{t.venue.title}</div>
           <div className="mt-3 font-display text-[10px] tracking-[0.35em] opacity-80 md:text-xs">{t.venue.at}</div>
         </FadeIn>
 
         {/* Mobile: 2nd (after "AT", before venue name). Desktop: right col */}
-        <FadeIn className="order-2 md:col-start-2 md:row-span-2 md:row-start-1" delay={0.1}>
+        <FadeIn className="order-2 -mt-4 md:mt-0 md:col-start-2 md:row-span-2 md:row-start-1" delay={0.1}>
           <div className="mx-auto max-w-md overflow-hidden rounded-sm" style={{ aspectRatio: '1/1' }}>
             <img
               src={ASSETS.venueIllustration}
@@ -761,18 +762,42 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
 
         {/* Mobile: 3rd. Desktop: left col, below title/at */}
         <FadeIn className="order-3 text-center md:col-start-1 md:row-start-2">
-          <div className="mt-4 font-script text-5xl leading-none md:text-6xl md:mt-0">{t.venue.name}</div>
-          <div className="mt-5 font-display text-[11px] tracking-[0.24em] opacity-85">
+          <a
+            href="https://maps.app.goo.gl/TZHSgw9awoD54mPQA"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-4 block font-script text-5xl leading-none text-[color:var(--brown)] no-underline transition hover:opacity-80 md:mt-0 md:text-6xl"
+          >
+            {t.venue.name}
+          </a>
+          <a
+            href="https://maps.app.goo.gl/TZHSgw9awoD54mPQA"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 block font-display text-[11px] tracking-[0.24em] opacity-85 no-underline transition hover:opacity-100"
+          >
             <div>{t.venue.address1}</div>
             <div>{t.venue.address2}</div>
-          </div>
+          </a>
           <div className="mt-5 font-display text-base font-bold tracking-[0.18em] opacity-100">{t.venue.dateLine}</div>
           <div className="mt-1 font-display text-[11px] tracking-[0.24em] opacity-80">{t.venue.follow}</div>
-          <div className="mt-8 font-script text-2xl leading-tight md:text-3xl">{t.venue.receptionName}</div>
-          <div className="mt-5 font-display text-[11px] tracking-[0.24em] opacity-85">
+          <a
+            href="https://maps.app.goo.gl/AqAJ7XpT1PwZxhwu9"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-8 block font-script text-2xl leading-tight text-[color:var(--brown)] no-underline transition hover:opacity-80 md:text-3xl"
+          >
+            {t.venue.receptionName}
+          </a>
+          <a
+            href="https://maps.app.goo.gl/AqAJ7XpT1PwZxhwu9"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 block font-display text-[11px] tracking-[0.24em] opacity-85 no-underline transition hover:opacity-100"
+          >
             <div>{t.venue.receptionAddress1}</div>
             <div>{t.venue.receptionAddress2}</div>
-          </div>
+          </a>
           <div className="mt-5 font-display text-base font-bold tracking-[0.18em] opacity-100">{t.venue.receptionDateLine}</div>
         </FadeIn>
       </div>
@@ -784,11 +809,7 @@ function MenuSection({ t }: { t: (typeof COPY)[Lang] }) {
   return (
     <SectionShell>
       <div className="mx-auto max-w-xl text-center">
-        <FadeIn>
-          <div className="font-display text-[10px] tracking-[0.35em] opacity-80 md:text-xs">{t.menu.date}</div>
-        </FadeIn>
-
-        <FadeIn delay={0.1} className="mt-6">
+        <FadeIn className="mt-0">
           <div className="relative mx-auto max-w-md md:max-w-lg">
             <img src={ASSETS.menuFrame} alt="" className="w-full select-none" draggable={false} />
             <div className="absolute inset-0 grid place-items-center px-10 py-12">

@@ -103,7 +103,7 @@ export const COPY: Record<Lang, Copy> = {
     },
     venue: {
       title: 'THE CELEBRATION WILL TAKE PLACE',
-      extra: 'Extra: custom illustration of your venue',
+      extra: '💍',
       at: 'AT',
       name: 'St. Thomas Catholic Church',
       address1: '1450 S Melrose Dr',
@@ -197,7 +197,7 @@ export const COPY: Record<Lang, Copy> = {
     },
     venue: {
       title: 'LA CELEBRACIÓN TENDRÁ LUGAR',
-      extra: 'Extra: ilustración personalizada del lugar',
+      extra: '💍',
       at: 'EN',
       name: 'St. Thomas Catholic Church',
       address1: '1450 S Melrose Dr',
