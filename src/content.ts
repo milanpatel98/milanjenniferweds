@@ -130,7 +130,7 @@ export const COPY: Record<Lang, Copy> = {
       title: 'Dress Code',
       body: 'We invite you to dress elegantly and formally to celebrate this special day with us.',
       attire: 'Formal Attire',
-      avoid: 'Please avoid wearing white',
+      avoid: 'Please avoid wearing White, Beige and Red',
     },
     gifts: {
       title: 'Gifts',
@@ -225,7 +225,7 @@ export const COPY: Record<Lang, Copy> = {
       title: 'Código de vestimenta',
       body: 'Te invitamos a vestir de forma elegante y formal para celebrar con nosotros este día tan especial.',
       attire: 'Vestimenta formal',
-      avoid: 'Por favor, evita llevar blanco',
+      avoid: 'Por favor, evita llevar blanco, beige y rojo',
     },
     gifts: {
       title: 'Regalos',

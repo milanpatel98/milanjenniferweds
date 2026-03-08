@@ -834,25 +834,24 @@ function MenuSection({ t }: { t: (typeof COPY)[Lang] }) {
 function DressCodeSection({ t }: { t: (typeof COPY)[Lang] }) {
   return (
     <SectionShell>
-      <div className="grid gap-10 md:grid-cols-2 md:items-center">
-        <FadeIn>
+      <div className="flex flex-col gap-10">
+        <FadeIn className="text-center">
           <div className="font-script text-5xl md:text-6xl">{t.dressCode.title}</div>
-          <div className="mt-4 max-w-md font-body text-[13px] leading-6 opacity-90 md:text-[15px] md:leading-7">
+          <FadeIn delay={0.05} className="mt-6">
+            <div className="mx-auto max-w-md">
+              <img
+                src={ASSETS.dresscodeIllustration}
+                alt=""
+                className="w-full select-none"
+                draggable={false}
+              />
+            </div>
+          </FadeIn>
+          <div className="mx-auto mt-6 max-w-md font-body text-[13px] leading-6 opacity-90 md:text-[15px] md:leading-7">
             {t.dressCode.body}
           </div>
           <div className="mt-6 font-display text-[11px] tracking-[0.24em] opacity-90">{t.dressCode.attire}</div>
           <div className="mt-1 font-display text-[11px] tracking-[0.24em] opacity-75">{t.dressCode.avoid}</div>
-        </FadeIn>
-
-        <FadeIn delay={0.1}>
-          <div className="mx-auto max-w-md">
-            <img
-              src={ASSETS.dresscodeIllustration}
-              alt=""
-              className="w-full select-none"
-              draggable={false}
-            />
-          </div>
         </FadeIn>
       </div>
     </SectionShell>
