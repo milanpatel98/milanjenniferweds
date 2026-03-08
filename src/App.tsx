@@ -9,10 +9,11 @@ const ASSETS = {
   curtainVideo: 'assets/curtain-video-BAKLj3Y5.mp4',
   scratchGold: 'assets/scratch-gold-DQrdz0lH.png',
   menuFrame: 'assets/menu-frame-BFE5kCs7.png',
-  venueIllustration: 'assets/venue-illustration-DebdGS8I.png',
+  venueIllustration: 'assets/venue-illustration.png',
   dresscodeIllustration: 'assets/dresscode-illustration-BT5yPEQh.png',
   giftIcon: 'assets/gift-icon-BssCdzah.png',
   rsvpConfirmation: 'assets/rsvp-confirmation.webm',
+  topbarLogo: 'assets/ram.png',
 } as const
 
 const WRAPPING_CONFETTI_COLORS = ['#FFFFFF', '#FFd700', '#d4af37', '#b8860b']
@@ -375,11 +376,21 @@ function TopBar({
       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
         <div
           className={[
-            'pointer-events-auto font-display text-sm tracking-[0.2em]',
+            'pointer-events-auto flex items-center transition-colors duration-300',
             scrolled ? 'opacity-90' : 'opacity-100',
           ].join(' ')}
+          aria-label={label}
+          role="img"
         >
-          {label}
+          <span
+            className="inline-block h-6 w-[140px] shrink-0 [mask-size:contain] [mask-repeat:no-repeat] [mask-position:center] md:h-7 md:w-[165px]"
+            style={{
+              backgroundColor: scrolled ? '#5c2018' : '#ffffff',
+              transition: 'background-color 0.3s ease',
+              maskImage: `url(${ASSETS.topbarLogo})`,
+              WebkitMaskImage: `url(${ASSETS.topbarLogo})`,
+            }}
+          />
         </div>
 
         <div className="pointer-events-auto flex items-center gap-3">
