@@ -30,6 +30,10 @@ export type Copy = {
     address2: string
     dateLine: string
     follow: string
+    receptionName: string
+    receptionAddress1: string
+    receptionAddress2: string
+    receptionDateLine: string
   }
   menu: { date: string; title: string; courses: { label: string; value: string }[] }
   dressCode: { title: string; body: string; attire: string; avoid: string }
@@ -106,6 +110,10 @@ export const COPY: Record<Lang, Copy> = {
       address2: 'Oceanside, CA 92056',
       dateLine: 'June 06, 2026 at 1:00 pm',
       follow: 'Reception to Follow',
+      receptionName: 'Aria Event Hall',
+      receptionAddress1: '740 Nordahl Rd Ste 125',
+      receptionAddress2: 'San Marcos, CA 92069',
+      receptionDateLine: 'June 06, 2026 at 4:30 pm',
     },
     menu: {
       date: '06 June 2026',
@@ -196,6 +204,10 @@ export const COPY: Record<Lang, Copy> = {
       address2: 'Oceanside, CA 92056',
       dateLine: '06 de Junio de 2026 a la 1:00 pm',
       follow: 'Recepción a continuación',
+      receptionName: 'Aria Event Hall',
+      receptionAddress1: '740 Nordahl Rd Ste 125',
+      receptionAddress2: 'San Marcos, CA 92069',
+      receptionDateLine: '06 de Junio de 2026 a las 4:30 pm',
     },
     menu: {
       date: '06 Junio 2026',

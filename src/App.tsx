@@ -749,11 +749,11 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
 
         {/* Mobile: 2nd (after "AT", before venue name). Desktop: right col */}
         <FadeIn className="order-2 md:col-start-2 md:row-span-2 md:row-start-1" delay={0.1}>
-          <div className="mx-auto max-w-md">
+          <div className="mx-auto max-w-md overflow-hidden rounded-sm" style={{ aspectRatio: '1/1' }}>
             <img
               src={ASSETS.venueIllustration}
               alt=""
-              className="w-full select-none"
+              className="h-full w-full select-none object-cover object-[center_24%]"
               draggable={false}
             />
           </div>
@@ -768,6 +768,12 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
           </div>
           <div className="mt-5 font-display text-base font-bold tracking-[0.18em] opacity-100">{t.venue.dateLine}</div>
           <div className="mt-1 font-display text-[11px] tracking-[0.24em] opacity-80">{t.venue.follow}</div>
+          <div className="mt-8 font-script text-2xl leading-tight md:text-3xl">{t.venue.receptionName}</div>
+          <div className="mt-5 font-display text-[11px] tracking-[0.24em] opacity-85">
+            <div>{t.venue.receptionAddress1}</div>
+            <div>{t.venue.receptionAddress2}</div>
+          </div>
+          <div className="mt-5 font-display text-base font-bold tracking-[0.18em] opacity-100">{t.venue.receptionDateLine}</div>
         </FadeIn>
       </div>
     </SectionShell>
