@@ -119,10 +119,11 @@ export const COPY: Record<Lang, Copy> = {
       date: '06 June 2026',
       title: 'Menu',
       courses: [
-        { label: 'APERITIVO', value: 'Selección de antipasti toscanos\nBruschetta, crostini & affettati misti' },
-        { label: 'PRIMO', value: 'Risotto al tartufo nero di Norcia\ncon parmigiano reggiano 24 mesi' },
-        { label: 'SECONDO', value: 'Filetto di manzo alla griglia\ncon salsa al vino rosso e verdure di stagione' },
-        { label: 'DOLCE', value: 'Torta nuziale con crema di mascarpone\ne frutti di bosco freschi\n\nVini della Tenuta' },
+        { label: 'APERITIVO', value: 'Selection of welcome appetizers' },
+        { label: 'ENTRÉE', value: 'Fresh seasonal salad' },
+        { label: 'MAIN COURSE', value: 'Choice of vegetarian or non-vegetarian dish\naccompanied by seasonal sides' },
+        { label: 'DESSERT', value: 'Wedding cake with delicate cream' },
+        { label: 'DRINKS', value: 'Soft drinks, water and house beverages' },
       ],
     },
     dressCode: {
@@ -213,10 +214,11 @@ export const COPY: Record<Lang, Copy> = {
       date: '06 Junio 2026',
       title: 'Menú',
       courses: [
-        { label: 'APERITIVO', value: 'Selección de antipasti toscanos\nBruschetta, crostini y affettati misti' },
-        { label: 'PRIMER PLATO', value: 'Risotto al tartufo nero di Norcia\ncon parmigiano reggiano 24 meses' },
-        { label: 'SEGUNDO PLATO', value: 'Filete de ternera a la parrilla\ncon salsa al vino tinto y verduras de temporada' },
-        { label: 'POSTRE', value: 'Tarta nupcial con crema de mascarpone\ny frutos del bosco frescos\n\nVinos de la finca' },
+        { label: 'APERITIVO', value: 'Selección de aperitivos de bienvenida' },
+        { label: 'ENTRADA', value: 'Ensalada fresca de temporada' },
+        { label: 'PLATO FUERTE', value: 'Elección de plato vegetariano o no vegetariano\nacompañado de guarniciones de temporada' },
+        { label: 'POSTRE', value: 'Pastel de boda con crema delicada' },
+        { label: 'BEBIDAS', value: 'Refrescos, agua y bebidas de la casa' },
       ],
     },
     dressCode: {

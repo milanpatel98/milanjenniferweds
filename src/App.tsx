@@ -807,12 +807,12 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
 
 function MenuSection({ t }: { t: (typeof COPY)[Lang] }) {
   return (
-    <SectionShell>
+    <SectionShell className="-mt-6 md:-mt-8">
       <div className="mx-auto max-w-xl text-center">
         <FadeIn className="mt-0">
           <div className="relative mx-auto max-w-md md:max-w-lg">
             <img src={ASSETS.menuFrame} alt="" className="w-full select-none" draggable={false} />
-            <div className="absolute inset-0 grid place-items-center px-10 py-12">
+            <div className="absolute inset-0 grid place-items-center px-10 pt-6 pb-12">
               <div className="w-full">
                 {t.menu.courses.map((c, idx) => (
                   <div key={c.label} className={idx === 0 ? '' : 'mt-6'}>
