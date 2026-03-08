@@ -15,6 +15,9 @@ const ASSETS = {
   rsvpConfirmation: 'assets/rsvp-confirmation.webm',
   topbarLogo: 'assets/ram.png',
   weddingRings: 'assets/wedding-rings.jpg',
+  transportCeremony: 'assets/transport-ceremony.png',
+  transportReception: 'assets/transport-reception.png',
+  thankYouCard: 'assets/thank-you-card.jpg',
 } as const
 
 const WRAPPING_CONFETTI_COLORS = ['#FFFFFF', '#FFd700', '#d4af37', '#b8860b']
@@ -812,10 +815,11 @@ function MenuSection({ t }: { t: (typeof COPY)[Lang] }) {
         <FadeIn className="mt-0">
           <div className="relative mx-auto max-w-md md:max-w-lg">
             <img src={ASSETS.menuFrame} alt="" className="w-full select-none" draggable={false} />
-            <div className="absolute inset-0 grid place-items-center px-10 pt-6 pb-12">
-              <div className="w-full">
+            {/* Text between ribbon (top) and dining table (bottom) so both stay visible */}
+            <div className="absolute inset-x-0 top-[20%] bottom-[26%] flex flex-col items-center overflow-hidden px-10 pt-2 pb-4 md:top-[18%] md:bottom-[28%] md:pt-3 md:pb-5">
+              <div className="w-full overflow-y-auto">
                 {t.menu.courses.map((c, idx) => (
-                  <div key={c.label} className={idx === 0 ? '' : 'mt-6'}>
+                  <div key={c.label} className={idx === 0 ? '' : 'mt-5'}>
                     <div className="font-display text-[10px] tracking-[0.35em] opacity-90 md:text-xs">{c.label}</div>
                     <div className="mt-2 whitespace-pre-line font-body text-[13px] leading-6 opacity-90 md:text-[14px]">
                       {c.value}
@@ -863,30 +867,22 @@ function GiftsSection({ t }: { t: (typeof COPY)[Lang] }) {
     <SectionShell>
       <div className="mx-auto max-w-3xl text-center">
         <FadeIn>
-          <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-[color:var(--brown-15)] bg-white/60">
+          <div className="mx-auto mb-12 flex h-16 w-16 items-center justify-center rounded-full border border-[color:var(--brown-15)] bg-white/60 md:mb-14">
             <img src={ASSETS.giftIcon} alt="" className="h-8 w-8 select-none" draggable={false} />
           </div>
           <div className="font-script text-5xl md:text-6xl">{t.gifts.title}</div>
-          <div className="mx-auto mt-4 max-w-xl font-body text-[13px] leading-6 opacity-90 md:text-[15px] md:leading-7">
+          <div className="mx-auto mt-8 max-w-xl py-4 font-body text-[13px] leading-6 opacity-90 md:mt-10 md:text-[15px] md:leading-7">
             {t.gifts.body}
           </div>
         </FadeIn>
 
-        <FadeIn delay={0.15}>
-          <div className="mx-auto mt-8 max-w-xl rounded-3xl border border-[color:var(--brown-15)] bg-white/55 px-6 py-7 backdrop-blur">
-            <div className="font-display text-[10px] tracking-[0.35em] opacity-90">{t.gifts.bankDetails}</div>
-            <div className="mt-4 space-y-2 font-display text-[11px] tracking-[0.18em] opacity-90">
-              <div>{t.gifts.accountHolder}</div>
-              <div>{t.gifts.iban}</div>
-              <div>{t.gifts.reference}</div>
-            </div>
-            <div className="mt-5 font-body text-[13px] opacity-85">{t.gifts.love}</div>
-          </div>
-        </FadeIn>
       </div>
     </SectionShell>
   )
 }
+
+const MAPS_CHURCH = 'https://maps.app.goo.gl/TZHSgw9awoD54mPQA'
+const MAPS_RECEPTION = 'https://maps.app.goo.gl/AqAJ7XpT1PwZxhwu9'
 
 function TransportSection({ t }: { t: (typeof COPY)[Lang] }) {
   return (
@@ -894,31 +890,54 @@ function TransportSection({ t }: { t: (typeof COPY)[Lang] }) {
       <div className="mx-auto max-w-3xl text-center">
         <FadeIn>
           <div className="font-script text-5xl md:text-6xl">{t.transport.title}</div>
-          <div className="mx-auto mt-4 max-w-xl font-body text-[13px] leading-6 opacity-90 md:text-[15px] md:leading-7">
+          <div className="mx-auto mt-16 max-w-xl font-body text-[13px] leading-6 opacity-90 md:mt-20 md:text-[15px] md:leading-7">
             {t.transport.body}
           </div>
         </FadeIn>
 
-        <div className="mx-auto mt-8 grid max-w-2xl gap-4 md:grid-cols-2">
-          <FadeIn delay={0.1}>
-            <div className="rounded-3xl border border-[color:var(--brown-15)] bg-white/55 px-6 py-7 text-left backdrop-blur">
-              <div className="font-display text-[10px] tracking-[0.35em] opacity-90">{t.transport.busDeparture}</div>
-              <div className="mt-4 font-body text-[14px] opacity-90">{t.transport.busDeparturePlace}</div>
-              <div className="mt-1 font-display text-sm tracking-[0.18em] opacity-90">{t.transport.busDepartureTime}</div>
+        <div className="mx-auto mt-16 max-w-md md:mt-20">
+          <FadeIn delay={0.08}>
+            <div className="mb-3 font-display text-[10px] tracking-[0.28em] text-[color:var(--brown)] opacity-80">
+              {t.transport.directionsLabel}
             </div>
+          </FadeIn>
+          <div className="flex flex-col gap-3">
+          <FadeIn delay={0.1}>
+            <a
+              href={MAPS_CHURCH}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${t.transport.ceremonyCta} — St. Thomas Catholic Church`}
+              className="flex items-center justify-between gap-4 rounded-2xl bg-white px-5 py-3.5 transition hover:bg-[color:var(--brown-08)] active:scale-[0.99]"
+            >
+              <span className="font-body text-[13px] font-medium text-[color:var(--brown)]">{t.transport.ceremonyCta}</span>
+              <img
+                src={ASSETS.transportCeremony}
+                alt=""
+                className="h-7 w-7 shrink-0 object-contain [mix-blend-mode:multiply]"
+                draggable={false}
+              />
+            </a>
           </FadeIn>
           <FadeIn delay={0.18}>
-            <div className="rounded-3xl border border-[color:var(--brown-15)] bg-white/55 px-6 py-7 text-left backdrop-blur">
-              <div className="font-display text-[10px] tracking-[0.35em] opacity-90">{t.transport.returnTo}</div>
-              <div className="mt-4 font-body text-[14px] opacity-90">{t.transport.busDeparturePlace}</div>
-              <div className="mt-1 font-display text-sm tracking-[0.18em] opacity-90">{t.transport.returnTime}</div>
-            </div>
+            <a
+              href={MAPS_RECEPTION}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${t.transport.receptionCta} — Aria Event Hall`}
+              className="flex items-center justify-between gap-4 rounded-2xl bg-white px-5 py-3.5 transition hover:bg-[color:var(--brown-08)] active:scale-[0.99]"
+            >
+              <span className="font-body text-[13px] font-medium text-[color:var(--brown)]">{t.transport.receptionCta}</span>
+              <img
+                src={ASSETS.transportReception}
+                alt=""
+                className="h-7 w-7 shrink-0 object-contain [mix-blend-mode:multiply]"
+                draggable={false}
+              />
+            </a>
           </FadeIn>
+          </div>
         </div>
-
-        <FadeIn delay={0.22}>
-          <div className="mt-6 font-display text-[10px] tracking-[0.35em] opacity-70 md:text-xs">{t.transport.note}</div>
-        </FadeIn>
       </div>
     </SectionShell>
   )
@@ -936,10 +955,7 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
   const [attendance, setAttendance] = useState<Attendance>('')
   const [guestCount, setGuestCount] = useState(1)
   const [guestNames, setGuestNames] = useState<string[]>([])
-  const [dietary, setDietary] = useState('')
   const [message, setMessage] = useState('')
-  const [song, setSong] = useState('')
-  const [needsBus, setNeedsBus] = useState(false)
   const [website, setWebsite] = useState('') // honeypot
 
   useEffect(() => {
@@ -994,8 +1010,7 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
         {!submitted ? (
           <>
             <FadeIn className="text-center">
-              <div className="font-body text-[13px] opacity-80">{t.rsvp.subtitle}</div>
-              <div className="mt-3 font-script text-5xl md:text-6xl">{t.rsvp.title}</div>
+              <div className="font-script text-5xl md:text-6xl">{t.rsvp.title}</div>
             </FadeIn>
 
             <FadeIn delay={0.12}>
@@ -1090,15 +1105,6 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
                   )}
 
                   <div>
-                    <label className="font-display text-[10px] tracking-[0.35em] opacity-85">{t.rsvp.dietary}</label>
-                    <input
-                      className="mt-2 w-full rounded-2xl border border-[color:var(--brown-15)] bg-white/70 px-4 py-3 font-body text-[14px] outline-none focus:border-[color:var(--brown-20)]"
-                      value={dietary}
-                      onChange={(e) => setDietary(e.target.value)}
-                    />
-                  </div>
-
-                  <div>
                     <label className="font-display text-[10px] tracking-[0.35em] opacity-85">{t.rsvp.message}</label>
                     <textarea
                       rows={3}
@@ -1108,20 +1114,6 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
                       onChange={(e) => setMessage(e.target.value)}
                     />
                   </div>
-
-                  <div>
-                    <label className="font-display text-[10px] tracking-[0.35em] opacity-85">{t.rsvp.song}</label>
-                    <input
-                      className="mt-2 w-full rounded-2xl border border-[color:var(--brown-15)] bg-white/70 px-4 py-3 font-body text-[14px] outline-none focus:border-[color:var(--brown-20)]"
-                      value={song}
-                      onChange={(e) => setSong(e.target.value)}
-                    />
-                  </div>
-
-                  <label className="flex cursor-pointer items-center gap-3 rounded-2xl border border-[color:var(--brown-15)] bg-white/60 px-4 py-3">
-                    <input type="checkbox" checked={needsBus} onChange={(e) => setNeedsBus(e.target.checked)} />
-                    <span className="font-body text-[14px]">{t.rsvp.needsBus}</span>
-                  </label>
 
                   {/* honeypot */}
                   <input
@@ -1141,7 +1133,7 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
                     className="mt-2 w-full rounded-full bg-[color:var(--brown)] px-6 py-3 font-display text-xs tracking-[0.24em] text-white transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {submitting ? '...' : t.rsvp.submit}
-                  </button>
+        </button>
                 </div>
               </form>
             </FadeIn>
@@ -1151,13 +1143,30 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
             <div className="mx-auto max-w-sm">
               <video className="w-full" src={ASSETS.rsvpConfirmation} autoPlay muted playsInline loop />
             </div>
-            <div className="mt-6 font-script text-5xl md:text-6xl">{t.rsvp.thanksTitle}</div>
-            <div className="mx-auto mt-4 max-w-xl font-body text-[13px] leading-6 opacity-90 md:text-[15px] md:leading-7">
-              {t.rsvp.thanksBody}
-            </div>
-            <div className="mt-5 font-script text-3xl opacity-95">{t.rsvp.thanksFrom}</div>
           </FadeIn>
         )}
+
+        {/* Thank-you card: frame with style match (script + serif, dark brown, centered) */}
+        <FadeIn className="mt-8 text-center" delay={submitted ? 0 : 0.2}>
+          <div className="relative mx-auto max-w-md">
+            <img
+              src={ASSETS.thankYouCard}
+              alt=""
+              className="w-full select-none shadow-[0_12px_40px_rgba(92,32,24,0.12)]"
+              draggable={false}
+            />
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center px-8 py-10 text-[color:var(--brown)] md:px-12 md:py-14"
+              aria-hidden="true"
+            >
+              <div className="font-script text-4xl leading-none md:text-5xl">{t.rsvp.thanksTitle}</div>
+              <p className="mt-5 max-w-[88%] whitespace-pre-line text-center font-body text-[13px] leading-[1.65] md:mt-6 md:text-[15px] md:leading-[1.7]">
+                {t.rsvp.thanksBody}
+              </p>
+              <div className="mt-6 whitespace-pre-line font-body text-lg leading-snug md:text-xl">{t.rsvp.thanksFrom}</div>
+            </div>
+          </div>
+        </FadeIn>
       </div>
     </SectionShell>
   )

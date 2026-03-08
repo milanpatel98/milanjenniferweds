@@ -49,16 +49,12 @@ export type Copy = {
   transport: {
     title: string
     body: string
-    busDeparture: string
-    busDeparturePlace: string
-    busDepartureTime: string
-    returnTo: string
-    returnTime: string
-    note: string
+    directionsLabel: string
+    ceremonyCta: string
+    receptionCta: string
   }
   rsvp: {
     title: string
-    subtitle: string
     fullName: string
     email: string
     willAttend: string
@@ -66,10 +62,7 @@ export type Copy = {
     no: string
     guestCount: string
     guestNames: string
-    dietary: string
     message: string
-    song: string
-    needsBus: string
     submit: string
     required: string
     thanksTitle: string
@@ -134,8 +127,7 @@ export const COPY: Record<Lang, Copy> = {
     },
     gifts: {
       title: 'Gifts',
-      body:
-        'Your presence is the best gift we could receive. However, if you wish to contribute to our new life together, you can do so via bank transfer.',
+      body: 'Your presence is the best gift we could receive. Your love and support mean the world to us.',
       love: 'With all our love',
       bankDetails: 'BANK DETAILS',
       accountHolder: 'ACCOUNT HOLDER: MILAN & JENNIFER',
@@ -143,19 +135,15 @@ export const COPY: Record<Lang, Copy> = {
       reference: 'REFERENCE: Milan & Jennifer Wedding',
     },
     transport: {
-      title: 'Transport',
+      title: 'Getting There',
       body:
-        'We have organized buses from the center of Florence to the villa so you can enjoy the celebration without worries.',
-      busDeparture: 'BUS DEPARTURE',
-      busDeparturePlace: 'Piazza della Signoria',
-      busDepartureTime: '16:00h',
-      returnTo: 'RETURN TO FLORENCE',
-      returnTime: '02:00h',
-      note: 'Please indicate in your RSVP if you need transport',
+        'Tap below to open directions in your maps app. We recommend driving or using your preferred ride-share to reach the ceremony and reception.',
+      directionsLabel: 'Directions',
+      ceremonyCta: 'Ceremony',
+      receptionCta: 'Reception',
     },
     rsvp: {
       title: 'Confirm your attendance',
-      subtitle: 'This form is fully customizable to your needs',
       fullName: 'FULL NAME *',
       email: 'EMAIL (OPTIONAL)',
       willAttend: 'WILL YOU ATTEND? *',
@@ -163,15 +151,12 @@ export const COPY: Record<Lang, Copy> = {
       no: "No, I can't make it",
       guestCount: 'NUMBER OF GUESTS *',
       guestNames: 'GUEST NAMES (IF MORE THAN 1) *',
-      dietary: 'DIETARY REQUIREMENTS (OPTIONAL)',
       message: 'MESSAGE FOR THE COUPLE (OPTIONAL)',
-      song: 'SONG SUGGESTION (OPTIONAL)',
-      needsBus: 'I NEED TRANSPORT (BUS)',
       submit: 'Confirm',
       required: 'Please fill out the required fields.',
       thanksTitle: 'Thank You',
-      thanksBody: 'For joining us on this special day. Your presence is the best gift we could receive.',
-      thanksFrom: 'Milan & Jennifer',
+      thanksBody: 'For joining us on this special day.\nYour presence is the best gift\nwe could receive.',
+      thanksFrom: 'Milankumar Patel &\nJennifer Carina Huitron Cortes',
     },
   },
   es: {
@@ -229,8 +214,7 @@ export const COPY: Record<Lang, Copy> = {
     },
     gifts: {
       title: 'Regalos',
-      body:
-        'Tu presencia es el mejor regalo que podríamos recibir. Sin embargo, si deseas contribuir a nuestra nueva vida juntos, puedes hacerlo por transferencia bancaria.',
+      body: 'Tu presencia es el mejor regalo que podríamos recibir. Tu amor y apoyo significan el mundo para nosotros.',
       love: 'Con todo nuestro cariño',
       bankDetails: 'DATOS BANCARIOS',
       accountHolder: 'TITULAR: MILAN & JENNIFER',
@@ -238,19 +222,15 @@ export const COPY: Record<Lang, Copy> = {
       reference: 'CONCEPTO: Boda Milan & Jennifer',
     },
     transport: {
-      title: 'Transporte',
+      title: 'Cómo llegar',
       body:
-        'Hemos organizado autobuses desde el centro de Florencia hasta la villa para que puedas disfrutar de la celebración sin preocupaciones.',
-      busDeparture: 'SALIDA DEL AUTOBÚS',
-      busDeparturePlace: 'Piazza della Signoria',
-      busDepartureTime: '16:00h',
-      returnTo: 'REGRESO A FLORENCIA',
-      returnTime: '02:00h',
-      note: 'Indica en tu confirmación si necesitas transporte',
+        'Toca abajo para abrir las indicaciones en tu app de mapas. Te recomendamos ir en coche o usar tu app de transporte preferida para llegar a la ceremonia y la recepción.',
+      directionsLabel: 'Indicaciones',
+      ceremonyCta: 'Ceremonia',
+      receptionCta: 'Recepción',
     },
     rsvp: {
       title: 'Confirma tu asistencia',
-      subtitle: 'Este formulario es totalmente personalizable',
       fullName: 'NOMBRE COMPLETO *',
       email: 'CORREO (OPCIONAL)',
       willAttend: '¿ASISTIRÁS? *',
@@ -258,15 +238,12 @@ export const COPY: Record<Lang, Copy> = {
       no: 'No puedo asistir',
       guestCount: 'NÚMERO DE INVITADOS *',
       guestNames: 'NOMBRES DE INVITADOS (SI MÁS DE 1) *',
-      dietary: 'REQUISITOS DIETÉTICOS (OPCIONAL)',
       message: 'MENSAJE PARA LOS NOVIOS (OPCIONAL)',
-      song: 'CANCIÓN SUGERIDA (OPCIONAL)',
-      needsBus: 'NECESITO TRANSPORTE (AUTOBÚS)',
       submit: 'Confirmar',
       required: 'Por favor, completa los campos obligatorios.',
       thanksTitle: 'Gracias',
-      thanksBody: 'Por acompañarnos en este día tan especial. Tu presencia es el mejor regalo que podríamos recibir.',
-      thanksFrom: 'Milan & Jennifer',
+      thanksBody: 'Por acompañarnos en este día tan especial.\nTu presencia es el mejor regalo\nque podríamos recibir.',
+      thanksFrom: 'Milankumar Patel &\nJennifer Carina Huitron Cortes',
     },
   },
 }
