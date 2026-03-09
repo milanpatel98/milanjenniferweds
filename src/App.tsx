@@ -8,7 +8,6 @@ const ASSETS = {
   curtainOpen: 'assets/curtain-open-C9MqdT6G.jpg',
   curtainVideo: 'assets/curtain-video-BAKLj3Y5.mp4',
   scratchGold: 'assets/scratch-gold-DQrdz0lH.png',
-  menuFrame: 'assets/menu-frame-BFE5kCs7.png',
   venueIllustration: 'assets/venue-illustration.png',
   dresscodeIllustration: 'assets/dresscode-illustration-BT5yPEQh.png',
   giftIcon: 'assets/gift-icon-BssCdzah.png',
@@ -352,7 +351,6 @@ function App() {
         {revealComplete && (
           <>
             <VenueSection t={t} />
-            <MenuSection t={t} />
             <DressCodeSection t={t} />
             <GiftsSection t={t} />
             <TransportSection t={t} />
@@ -688,7 +686,7 @@ function RevealSection({
 }
 
 function CountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
-  const target = useMemo(() => new Date('2026-06-06T16:00:00'), [])
+  const target = useMemo(() => new Date('2026-06-06T13:00:00'), [])
   const [now, setNow] = useState(() => new Date())
 
   useEffect(() => {
@@ -808,33 +806,6 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
   )
 }
 
-function MenuSection({ t }: { t: (typeof COPY)[Lang] }) {
-  return (
-    <SectionShell className="-mt-6 md:-mt-8">
-      <div className="mx-auto max-w-xl text-center">
-        <FadeIn className="mt-0">
-          <div className="relative mx-auto max-w-md md:max-w-lg">
-            <img src={ASSETS.menuFrame} alt="" className="w-full select-none" draggable={false} />
-            {/* Text between ribbon (top) and dining table (bottom) so both stay visible */}
-            <div className="absolute inset-x-0 top-[20%] bottom-[26%] flex flex-col items-center overflow-hidden px-10 pt-2 pb-4 md:top-[18%] md:bottom-[28%] md:pt-3 md:pb-5">
-              <div className="w-full overflow-y-auto">
-                {t.menu.courses.map((c, idx) => (
-                  <div key={c.label} className={idx === 0 ? '' : 'mt-5'}>
-                    <div className="font-display text-[10px] tracking-[0.35em] opacity-90 md:text-xs">{c.label}</div>
-                    <div className="mt-2 whitespace-pre-line font-body text-[13px] leading-6 opacity-90 md:text-[14px]">
-                      {c.value}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </FadeIn>
-      </div>
-    </SectionShell>
-  )
-}
-
 function DressCodeSection({ t }: { t: (typeof COPY)[Lang] }) {
   return (
     <SectionShell>
@@ -867,8 +838,8 @@ function GiftsSection({ t }: { t: (typeof COPY)[Lang] }) {
     <SectionShell>
       <div className="mx-auto max-w-3xl text-center">
         <FadeIn>
-          <div className="mx-auto mb-12 flex h-16 w-16 items-center justify-center rounded-full border border-[color:var(--brown-15)] bg-white/60 md:mb-14">
-            <img src={ASSETS.giftIcon} alt="" className="h-8 w-8 select-none" draggable={false} />
+          <div className="mx-auto mb-12 flex justify-center md:mb-14">
+            <img src={ASSETS.giftIcon} alt="" className="h-[120px] w-[120px] select-none" draggable={false} />
           </div>
           <div className="font-script text-5xl md:text-6xl">{t.gifts.title}</div>
           <div className="mx-auto mt-8 max-w-xl py-4 font-body text-[13px] leading-6 opacity-90 md:mt-10 md:text-[15px] md:leading-7">

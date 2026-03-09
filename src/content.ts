@@ -111,13 +111,7 @@ export const COPY: Record<Lang, Copy> = {
     menu: {
       date: '06 June 2026',
       title: 'Menu',
-      courses: [
-        { label: 'APERITIVO', value: 'Selection of welcome appetizers' },
-        { label: 'ENTRÉE', value: 'Fresh seasonal salad' },
-        { label: 'MAIN COURSE', value: 'Choice of vegetarian or non-vegetarian dish\naccompanied by seasonal sides' },
-        { label: 'DESSERT', value: 'Wedding cake with delicate cream' },
-        { label: 'DRINKS', value: 'Soft drinks, water and house beverages' },
-      ],
+      courses: [],
     },
     dressCode: {
       title: 'Dress Code',
@@ -198,17 +192,11 @@ export const COPY: Record<Lang, Copy> = {
     menu: {
       date: '06 Junio 2026',
       title: 'Menú',
-      courses: [
-        { label: 'APERITIVO', value: 'Selección de aperitivos de bienvenida' },
-        { label: 'ENTRADA', value: 'Ensalada fresca de temporada' },
-        { label: 'PLATO FUERTE', value: 'Elección de plato vegetariano o no vegetariano\nacompañado de guarniciones de temporada' },
-        { label: 'POSTRE', value: 'Pastel de boda con crema delicada' },
-        { label: 'BEBIDAS', value: 'Refrescos, agua y bebidas de la casa' },
-      ],
+      courses: [],
     },
     dressCode: {
       title: 'Código de vestimenta',
-      body: 'Te invitamos a vestir de forma elegante y formal para celebrar con nosotros este día tan especial.',
+      body: 'Te invitamos a vestir elegante y formal para celebrar con nosotros este día tan especial.',
       attire: 'Vestimenta formal',
       avoid: 'Por favor, evita llevar blanco, beige y rojo',
     },
