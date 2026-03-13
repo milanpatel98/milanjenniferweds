@@ -822,11 +822,15 @@ function DressCodeSection({ t }: { t: (typeof COPY)[Lang] }) {
               />
             </div>
           </FadeIn>
-          <div className="mx-auto mt-6 max-w-md font-body text-[13px] leading-6 opacity-90 md:text-[15px] md:leading-7">
+          <div className="mx-auto mt-6 max-w-md font-body text-[14px] leading-7 text-[color:var(--brown)] opacity-100 md:text-[16px] md:leading-8">
             {t.dressCode.body}
           </div>
-          <div className="mt-6 font-display text-[11px] tracking-[0.24em] opacity-90">{t.dressCode.attire}</div>
-          <div className="mt-1 font-display text-[11px] tracking-[0.24em] opacity-75">{t.dressCode.avoid}</div>
+          <div className="mt-6 font-display font-bold text-[12px] tracking-[0.26em] text-[color:var(--brown)] opacity-100 md:text-[13px]">
+            {t.dressCode.attire}
+          </div>
+          <div className="mt-1 font-display font-bold text-[12px] tracking-[0.26em] text-[color:var(--brown)] opacity-100 md:text-[13px]">
+            {t.dressCode.avoid}
+          </div>
         </FadeIn>
       </div>
     </SectionShell>
@@ -1111,9 +1115,9 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
           </>
         ) : (
           <FadeIn className="text-center">
-            <div className="mx-auto max-w-sm">
-              <video className="w-full" src={ASSETS.rsvpConfirmation} autoPlay muted playsInline loop />
-            </div>
+            <p className="font-script text-4xl text-[color:var(--brown)] md:text-5xl">
+              {t.rsvp.seeYouAtWedding}
+            </p>
           </FadeIn>
         )}
 
@@ -1134,7 +1138,7 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
               <p className="mt-5 max-w-[88%] whitespace-pre-line text-center font-body text-[13px] leading-[1.65] md:mt-6 md:text-[15px] md:leading-[1.7]">
                 {t.rsvp.thanksBody}
               </p>
-              <div className="mt-6 whitespace-pre-line font-body text-lg leading-snug md:text-xl">{t.rsvp.thanksFrom}</div>
+              <div className="mt-6 whitespace-pre-line font-body text-base leading-snug md:text-lg">{t.rsvp.thanksFrom}</div>
             </div>
           </div>
         </FadeIn>

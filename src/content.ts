@@ -68,6 +68,7 @@ export type Copy = {
     thanksTitle: string
     thanksBody: string
     thanksFrom: string
+    seeYouAtWedding: string
   }
 }
 
@@ -151,6 +152,7 @@ export const COPY: Record<Lang, Copy> = {
       thanksTitle: 'Thank You',
       thanksBody: 'For joining us on this special day.\nYour presence is the best gift\nwe could receive.',
       thanksFrom: 'Milankumar Patel &\nJennifer Carina Huitron Cortes',
+      seeYouAtWedding: 'See you at the wedding',
     },
   },
   es: {
@@ -232,6 +234,7 @@ export const COPY: Record<Lang, Copy> = {
       thanksTitle: 'Gracias',
       thanksBody: 'Por acompañarnos en este día tan especial.\nTu presencia es el mejor regalo\nque podríamos recibir.',
       thanksFrom: 'Milankumar Patel &\nJennifer Carina Huitron Cortes',
+      seeYouAtWedding: 'Nos vemos en la boda',
     },
   },
 }
