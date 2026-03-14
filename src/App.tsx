@@ -436,6 +436,7 @@ function TopBar({
 
 function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntroComplete?: () => void }) {
   const [phase, setPhase] = useState<'closed' | 'opening' | 'open'>('closed')
+  const [muted, setMuted] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const completedRef = useRef(false)
@@ -447,6 +448,11 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
     }
   }, [phase, onIntroComplete])
 
+  useEffect(() => {
+    const audio = audioRef.current
+    if (audio) audio.volume = muted ? 0 : 0.65
+  }, [muted])
+
   const onContinue = async () => {
     if (phase !== 'closed') return
     setPhase('opening')
@@ -454,7 +460,7 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
     requestAnimationFrame(() => {
       const audio = audioRef.current
       if (audio) {
-        audio.volume = 0.65
+        audio.volume = muted ? 0 : 0.65
         audio.loop = true
         void audio.play().catch(() => {
           // If playback fails, we silently continue (some browsers block until fully user-initiated).
@@ -469,6 +475,28 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
   return (
     <section className="relative grid min-h-[100dvh] place-items-center overflow-x-hidden">
       <audio ref={audioRef} src="assets/intro-music.mp3" preload="auto" />
+      {(phase === 'opening' || phase === 'open') && (
+        <button
+          type="button"
+          onClick={() => setMuted((m) => !m)}
+          className="fixed bottom-6 right-6 z-30 grid h-10 w-10 place-items-center rounded-full border border-[color:var(--brown-20)] bg-[color:rgba(250,248,245,0.9)] text-[color:var(--brown)] backdrop-blur transition hover:bg-[color:rgba(92,32,24,0.08)] focus:outline-none md:bottom-8 md:right-8"
+          aria-label={muted ? 'Unmute music' : 'Mute music'}
+        >
+          {muted ? (
+            <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 5L6 9H2v6h4l5 4V5z" />
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+            </svg>
+          ) : (
+            <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 5L6 9H2v6h4l5 4V5z" />
+              <line x1="23" y1="9" x2="17" y2="15" />
+              <line x1="17" y1="9" x2="23" y2="15" />
+            </svg>
+          )}
+        </button>
+      )}
       <img
         src={phase === 'open' ? ASSETS.curtainOpen : ASSETS.curtainClosed}
         alt=""
