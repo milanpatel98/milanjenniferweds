@@ -17,6 +17,7 @@ const ASSETS = {
   transportCeremony: 'assets/transport-ceremony.png',
   transportReception: 'assets/transport-reception.png',
   thankYouCard: 'assets/thank-you-card.jpg',
+  introCross: 'assets/intro-cross.png',
 } as const
 
 const WRAPPING_CONFETTI_COLORS = ['#FFFFFF', '#FFd700', '#d4af37', '#b8860b']
@@ -529,17 +530,52 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
 
         <AnimatePresence mode="wait">
           {phase === 'closed' && (
-            <motion.button
+            <motion.div
               key="tap-to-continue"
-              type="button"
-              onClick={onContinue}
-              className="rounded-full border border-[color:var(--brown-20)] bg-[color:rgba(250,248,245,0.85)] px-6 py-3 font-display text-xs tracking-[0.24em] text-[color:var(--brown)] backdrop-blur transition hover:bg-[color:rgba(92,32,24,0.06)]"
+              className="flex flex-col items-center gap-3"
               initial={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
             >
-              {t.intro.tapToContinue}
-            </motion.button>
+              <button
+                type="button"
+                onClick={onContinue}
+                className="flex items-center justify-center focus:outline-none"
+                aria-label={t.intro.tapToContinue}
+              >
+                <svg
+                  className="h-10 w-10 animate-intro-cross-blink md:h-12 md:w-12"
+                  viewBox="0 0 100 100"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <defs>
+                    <filter id="intro-cross-invert">
+                      <feColorMatrix type="matrix" values="-1 0 0 0 1 0 -1 0 0 1 0 0 -1 0 1 0 0 0 1 0" />
+                    </filter>
+                    <mask id="intro-cross-mask">
+                      <image
+                        href={ASSETS.introCross}
+                        x="0"
+                        y="0"
+                        width="100"
+                        height="100"
+                        preserveAspectRatio="xMidYMid meet"
+                        filter="url(#intro-cross-invert)"
+                      />
+                    </mask>
+                  </defs>
+                  <rect width="100" height="100" fill="white" mask="url(#intro-cross-mask)" />
+                </svg>
+              </button>
+              <button
+                type="button"
+                onClick={onContinue}
+                className="rounded-full border border-[color:var(--brown-20)] bg-[color:rgba(250,248,245,0.85)] px-6 py-3 font-display text-xs tracking-[0.24em] text-[color:var(--brown)] backdrop-blur transition hover:bg-[color:rgba(92,32,24,0.06)]"
+              >
+                {t.intro.tapToContinue}
+              </button>
+            </motion.div>
           )}
         </AnimatePresence>
 
