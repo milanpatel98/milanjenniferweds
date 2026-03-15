@@ -456,20 +456,30 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
   const onContinue = async () => {
     if (phase !== 'closed') return
     setPhase('opening')
-    // Wait a tick so the video is in the DOM.
-    requestAnimationFrame(() => {
-      const audio = audioRef.current
-      if (audio) {
-        audio.volume = muted ? 0 : 0.65
-        audio.loop = true
-        void audio.play().catch(() => {
-          // If playback fails, we silently continue (some browsers block until fully user-initiated).
-        })
-      }
-      void videoRef.current?.play().catch(() => {
-        // If autoplay is blocked, user already interacted, so play should succeed.
+    const audio = audioRef.current
+    if (audio) {
+      audio.volume = muted ? 0 : 0.65
+      audio.loop = true
+      void audio.play().catch(() => {
+        // Mobile often blocks autoplay; unmute button will start playback on first tap.
       })
+    }
+    requestAnimationFrame(() => {
+      void videoRef.current?.play().catch(() => {})
     })
+  }
+
+  const onMuteToggle = () => {
+    const nextMuted = !muted
+    setMuted(nextMuted)
+    const audio = audioRef.current
+    if (audio) {
+      audio.volume = nextMuted ? 0 : 0.65
+      if (!nextMuted) {
+        // On mobile, play() must run inside the user gesture (tap); otherwise audio stays silent.
+        void audio.play().catch(() => {})
+      }
+    }
   }
 
   return (
@@ -478,8 +488,9 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
       {(phase === 'opening' || phase === 'open') && (
         <button
           type="button"
-          onClick={() => setMuted((m) => !m)}
-          className="fixed bottom-6 right-6 z-30 grid h-10 w-10 place-items-center rounded-full border border-[color:var(--brown-20)] bg-[color:rgba(250,248,245,0.9)] text-[color:var(--brown)] backdrop-blur transition hover:bg-[color:rgba(92,32,24,0.08)] focus:outline-none md:bottom-8 md:right-8"
+          onClick={onMuteToggle}
+          style={{ touchAction: 'manipulation' }}
+          className="fixed bottom-6 right-6 z-30 grid h-10 w-10 place-items-center rounded-full border border-[color:var(--brown-20)] bg-[color:rgba(250,248,245,0.9)] text-[color:var(--brown)] backdrop-blur transition hover:bg-[color:rgba(92,32,24,0.08)] focus:outline-none active:bg-[color:rgba(92,32,24,0.08)] md:bottom-8 md:right-8"
           aria-label={muted ? 'Unmute music' : 'Mute music'}
         >
           {muted ? (
