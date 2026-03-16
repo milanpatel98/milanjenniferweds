@@ -1172,7 +1172,7 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
               <p className="mt-5 max-w-[88%] whitespace-pre-line text-center font-body text-[13px] leading-[1.65] md:mt-6 md:text-[15px] md:leading-[1.7]">
                 {t.rsvp.thanksBody}
               </p>
-              <div className="mt-6 whitespace-pre-line font-names text-3xl leading-tight md:text-5xl" style={{ lineHeight: 1.05 }}>{t.rsvp.thanksFrom}</div>
+              <div className="mt-6 whitespace-pre-line font-names text-3xl leading-tight md:text-4xl" style={{ lineHeight: 1.05 }}>{t.rsvp.thanksFrom}</div>
             </div>
           </div>
         </FadeIn>
