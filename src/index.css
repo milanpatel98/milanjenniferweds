@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "Thesignature";
+  src: url("./assets/fonts/Thesignature.otf") format("opentype"),
+       url("./assets/fonts/Thesignature.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --paper: #faf8f5;
   --brown: #5c2018;
@@ -7,6 +16,7 @@
   --brown-15: rgba(92, 32, 24, 0.15);
   --brown-08: rgba(92, 32, 24, 0.08);
   --font-script: "Great Vibes", cursive;
+  --font-names: "Thesignature", cursive;
   --font-display: "Cormorant Garamond", serif;
   --font-body: "Lora", serif;
 }
@@ -30,6 +40,10 @@ body {
 
 .font-script {
   font-family: var(--font-script);
+}
+
+.font-names {
+  font-family: var(--font-names);
 }
 
 .font-display {

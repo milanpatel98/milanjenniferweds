@@ -436,7 +436,6 @@ function TopBar({
 
 function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntroComplete?: () => void }) {
   const [phase, setPhase] = useState<'closed' | 'opening' | 'open'>('closed')
-  const [muted, setMuted] = useState(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const completedRef = useRef(false)
@@ -448,66 +447,23 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
     }
   }, [phase, onIntroComplete])
 
-  useEffect(() => {
-    const audio = audioRef.current
-    if (audio) audio.volume = muted ? 0 : 0.65
-  }, [muted])
-
-  const onContinue = async () => {
+  const onContinue = () => {
     if (phase !== 'closed') return
     setPhase('opening')
     const audio = audioRef.current
     if (audio) {
-      audio.volume = muted ? 0 : 0.65
+      audio.volume = 0.65
       audio.loop = true
-      void audio.play().catch(() => {
-        // Mobile often blocks autoplay; unmute button will start playback on first tap.
-      })
+      void audio.play().catch(() => {})
     }
     requestAnimationFrame(() => {
       void videoRef.current?.play().catch(() => {})
     })
   }
 
-  const onMuteToggle = () => {
-    const nextMuted = !muted
-    setMuted(nextMuted)
-    const audio = audioRef.current
-    if (audio) {
-      audio.volume = nextMuted ? 0 : 0.65
-      if (!nextMuted) {
-        // On mobile, play() must run inside the user gesture (tap); otherwise audio stays silent.
-        void audio.play().catch(() => {})
-      }
-    }
-  }
-
   return (
     <section className="relative grid min-h-[100dvh] place-items-center overflow-x-hidden">
       <audio ref={audioRef} src="assets/intro-music.mp3" preload="auto" />
-      {(phase === 'opening' || phase === 'open') && (
-        <button
-          type="button"
-          onClick={onMuteToggle}
-          style={{ touchAction: 'manipulation' }}
-          className="fixed bottom-6 right-6 z-30 grid h-10 w-10 place-items-center rounded-full border border-[color:var(--brown-20)] bg-[color:rgba(250,248,245,0.9)] text-[color:var(--brown)] backdrop-blur transition hover:bg-[color:rgba(92,32,24,0.08)] focus:outline-none active:bg-[color:rgba(92,32,24,0.08)] md:bottom-8 md:right-8"
-          aria-label={muted ? 'Unmute music' : 'Mute music'}
-        >
-          {muted ? (
-            <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-              <path d="M11 5L6 9H2v6h4l5 4V5z" />
-              <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
-              <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-            </svg>
-          ) : (
-            <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-              <path d="M11 5L6 9H2v6h4l5 4V5z" />
-              <line x1="23" y1="9" x2="17" y2="15" />
-              <line x1="17" y1="9" x2="23" y2="15" />
-            </svg>
-          )}
-        </button>
-      )}
       <img
         src={phase === 'open' ? ASSETS.curtainOpen : ASSETS.curtainClosed}
         alt=""
@@ -742,7 +698,10 @@ function RevealSection({
         <div className="mt-16 md:mt-20 lg:mt-24 flex items-center justify-center">
           {all && (
             <FadeIn delay={0.2}>
-              <div className="font-script text-2xl text-[color:var(--brown)] md:text-3xl lg:text-4xl">
+              <div
+                className="text-2xl text-[color:var(--brown)] md:text-3xl lg:text-4xl"
+                style={{ fontFamily: 'var(--font-script)' }}
+              >
                 {t.reveal.completeMessage}
               </div>
             </FadeIn>
@@ -903,7 +862,7 @@ function DressCodeSection({ t }: { t: (typeof COPY)[Lang] }) {
           <div className="mt-6 font-display font-bold text-[12px] tracking-[0.26em] text-[color:var(--brown)] opacity-100 md:text-[13px]">
             {t.dressCode.attire}
           </div>
-          <div className="mt-1 font-display font-bold text-[12px] tracking-[0.26em] text-[color:var(--brown)] opacity-100 md:text-[13px]">
+          <div className="mt-1 font-display font-bold text-[15px] tracking-normal text-[color:var(--brown)] opacity-100 md:text-[17px]">
             {t.dressCode.avoid}
           </div>
         </FadeIn>
@@ -1213,7 +1172,7 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
               <p className="mt-5 max-w-[88%] whitespace-pre-line text-center font-body text-[13px] leading-[1.65] md:mt-6 md:text-[15px] md:leading-[1.7]">
                 {t.rsvp.thanksBody}
               </p>
-              <div className="mt-6 whitespace-pre-line font-body text-base leading-snug md:text-lg">{t.rsvp.thanksFrom}</div>
+              <div className="mt-6 whitespace-pre-line font-names text-4xl leading-tight md:text-5xl" style={{ lineHeight: 1.05 }}>{t.rsvp.thanksFrom}</div>
             </div>
           </div>
         </FadeIn>
