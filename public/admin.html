@@ -418,7 +418,27 @@
 
       <div class="table-card" style="margin-top: 8px; margin-bottom: 20px;">
         <div class="table-header">
-          <div class="table-title">Submissions · last 30 days</div>
+          <div class="table-title">
+            Submissions ·
+            <select
+              id="range-select"
+              style="
+                margin-left: 8px;
+                padding: 4px 10px;
+                border-radius: 999px;
+                border: 1px solid rgba(31, 41, 55, 0.9);
+                background: rgba(2, 6, 23, 0.9);
+                color: #e5e7eb;
+                letter-spacing: 0.16em;
+                text-transform: uppercase;
+                font-size: 11px;
+              "
+            >
+              <option value="30">Last 30 days</option>
+              <option value="7">Last 7 days</option>
+              <option value="1">Today</option>
+            </select>
+          </div>
           <div class="table-meta" id="meta-chart"></div>
         </div>
         <div style="height: 220px;">
@@ -466,6 +486,9 @@
       const JSONP_CALLBACK = '__rsvp_jsonp_cb';
       const PIN_CODE = '6598';
       const PIN_STORAGE_KEY = 'rsvp_admin_pin_ok';
+      const RANGE_STORAGE_KEY = 'rsvp_admin_range_days';
+      let rangeDays = 30;
+      let allRowsCache = [];
 
       function formatDate(value) {
         if (!value) return '';
@@ -547,6 +570,8 @@
               return db - da;
             });
 
+          allRowsCache = cleaned;
+
           const total = cleaned.length;
           const yes = cleaned.filter((r) => r.attendance === 'yes').length;
           const no = cleaned.filter((r) => r.attendance === 'no').length;
@@ -570,50 +595,12 @@
           document.getElementById('metric-guests-note').textContent =
             'Sum of guestCount where attendance is yes.';
 
-          renderChart(cleaned);
+          applyRangeAndRender();
 
           document.getElementById('meta-summary').textContent =
             total === 0
               ? 'No submissions yet.'
               : `${total} submission${total === 1 ? '' : 's'} · ${yes} yes · ${no} no`;
-
-          if (total === 0) {
-            bodyEl.innerHTML =
-              '<tr><td colspan="7" class="muted" style="text-align:center">No RSVPs yet.</td></tr>';
-          } else {
-            bodyEl.innerHTML = cleaned
-              .map((r) => {
-                const pillClass =
-                  r.attendance === 'yes'
-                    ? 'pill-attendance yes'
-                    : r.attendance === 'no'
-                    ? 'pill-attendance no'
-                    : 'muted';
-                const pillLabel =
-                  r.attendance === 'yes'
-                    ? 'Yes'
-                    : r.attendance === 'no'
-                    ? 'No'
-                    : r.attendance || '—';
-
-                return `
-                  <tr>
-                    <td class="nowrap muted">${escapeHtml(formatDate(r.timestamp))}</td>
-                    <td class="nowrap">${escapeHtml(r.fullName || '—')}</td>
-                    <td>
-                      <span class="${pillClass}">
-                        <span>${escapeHtml(pillLabel)}</span>
-                      </span>
-                    </td>
-                    <td><span class="badge">${isFinite(r.guestCount) ? r.guestCount : '—'}</span></td>
-                    <td class="nowrap muted">${escapeHtml(r.email || '—')}</td>
-                    <td class="message muted">${escapeHtml(r.guestNames || '—')}</td>
-                    <td class="message">${escapeHtml(r.message || '')}</td>
-                  </tr>
-                `;
-              })
-              .join('');
-          }
 
           statusEl.innerHTML =
             '<span class="strong">Live</span><span>Data loaded from Google Sheets. Refresh this page to fetch the latest RSVPs.</span>';
@@ -628,15 +615,85 @@
 
       let chartInstance = null;
 
+      function startOfLocalDay(d) {
+        const x = new Date(d);
+        x.setHours(0, 0, 0, 0);
+        return x;
+      }
+
+      function inRange(ts) {
+        const t = new Date(ts);
+        if (Number.isNaN(t.getTime())) return false;
+        const start = startOfLocalDay(new Date());
+        start.setDate(start.getDate() - (rangeDays - 1));
+        return t.getTime() >= start.getTime();
+      }
+
+      function applyRangeAndRender() {
+        const filtered = allRowsCache.filter((r) => inRange(r.timestamp));
+        renderChart(filtered);
+        renderTable(filtered);
+      }
+
+      function renderTable(rows) {
+        const bodyEl = document.getElementById('tbody-rows');
+        const meta = document.getElementById('meta-summary');
+        const shown = rows.length;
+        const yes = rows.filter((r) => r.attendance === 'yes').length;
+        const no = rows.filter((r) => r.attendance === 'no').length;
+        meta.textContent =
+          shown === 0
+            ? `No submissions in selected range.`
+            : `${shown} shown · ${yes} yes · ${no} no`;
+
+        if (shown === 0) {
+          bodyEl.innerHTML =
+            '<tr><td colspan="7" class="muted" style="text-align:center">No RSVPs in this range.</td></tr>';
+          return;
+        }
+
+        bodyEl.innerHTML = rows
+          .map((r) => {
+            const pillClass =
+              r.attendance === 'yes'
+                ? 'pill-attendance yes'
+                : r.attendance === 'no'
+                ? 'pill-attendance no'
+                : 'muted';
+            const pillLabel =
+              r.attendance === 'yes'
+                ? 'Yes'
+                : r.attendance === 'no'
+                ? 'No'
+                : r.attendance || '—';
+
+            return `
+              <tr>
+                <td class="nowrap muted">${escapeHtml(formatDate(r.timestamp))}</td>
+                <td class="nowrap">${escapeHtml(r.fullName || '—')}</td>
+                <td>
+                  <span class="${pillClass}">
+                    <span>${escapeHtml(pillLabel)}</span>
+                  </span>
+                </td>
+                <td><span class="badge">${isFinite(r.guestCount) ? r.guestCount : '—'}</span></td>
+                <td class="nowrap muted">${escapeHtml(r.email || '—')}</td>
+                <td class="message muted">${escapeHtml(r.guestNames || '—')}</td>
+                <td class="message">${escapeHtml(r.message || '')}</td>
+              </tr>
+            `;
+          })
+          .join('');
+      }
+
       function renderChart(rows) {
         const ctx = document.getElementById('submissionsChart').getContext('2d');
         const metaEl = document.getElementById('meta-chart');
 
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
+        const today = startOfLocalDay(new Date());
         const labels = [];
         const data = [];
-        for (let i = 29; i >= 0; i--) {
+        for (let i = rangeDays - 1; i >= 0; i--) {
           const d = new Date(today);
           d.setDate(d.getDate() - i);
           const key = d.toISOString().slice(0, 10);
@@ -709,8 +766,21 @@
         const total = data.reduce((a, b) => a + b, 0);
         metaEl.textContent =
           total === 0
-            ? 'No submissions in the last 30 days.'
-            : `${total} submission${total === 1 ? '' : 's'} in the last 30 days.`;
+            ? 'No submissions in selected range.'
+            : `${total} submission${total === 1 ? '' : 's'} in selected range.`;
+      }
+
+      function setupRangePicker() {
+        const select = document.getElementById('range-select');
+        const saved = Number(localStorage.getItem(RANGE_STORAGE_KEY) || '30');
+        rangeDays = saved === 7 || saved === 1 ? saved : 30;
+        select.value = String(rangeDays);
+        select.addEventListener('change', () => {
+          const next = Number(select.value || '30');
+          rangeDays = next === 7 || next === 1 ? next : 30;
+          localStorage.setItem(RANGE_STORAGE_KEY, String(rangeDays));
+          applyRangeAndRender();
+        });
       }
 
       function setupLockscreen() {
@@ -743,6 +813,7 @@
 
         if (localStorage.getItem(PIN_STORAGE_KEY) === 'ok') {
           lockEl.style.display = 'none';
+          setupRangePicker();
           loadRsvps();
         } else {
           inputEl.focus();
