@@ -1017,15 +1017,12 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
         message,
       }
 
-      const res = await fetch('https://formspree.io/f/xeerrykr', {
+      await fetch('https://script.google.com/macros/s/AKfycby0eUX5UK6_RugNgCXJWJgAWZ4GHjedxAPYkia0glXVPiF9pz9_Tl0mHRgqGQrNlY_yyA/exec', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
         body: JSON.stringify(payload),
       })
-
-      if (!res.ok) {
-        throw new Error('Failed to send RSVP')
-      }
 
       setSubmitted(true)
     } catch (err) {
