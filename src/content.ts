@@ -29,6 +29,7 @@ export type Copy = {
     address1: string
     address2: string
     dateLine: string
+    timeLine: string
     follow: string
     receptionName: string
     receptionAddress1: string
@@ -102,12 +103,13 @@ export const COPY: Record<Lang, Copy> = {
       name: 'St. Thomas Catholic Church',
       address1: '1450 S Melrose Dr',
       address2: 'Oceanside, CA 92056',
-      dateLine: 'June 06, 2026 at 1:00 pm',
+      dateLine: 'June 06, 2026',
+      timeLine: 'at 1:00 pm',
       follow: 'Reception to Follow',
       receptionName: 'Aria Event Hall',
       receptionAddress1: '740 Nordahl Rd Ste 125',
       receptionAddress2: 'San Marcos, CA 92069',
-      receptionDateLine: 'June 06, 2026 at 4:30 pm',
+      receptionDateLine: 'at 4:30 pm',
     },
     menu: {
       date: '06 June 2026',
@@ -184,12 +186,13 @@ export const COPY: Record<Lang, Copy> = {
       name: 'St. Thomas Catholic Church',
       address1: '1450 S Melrose Dr',
       address2: 'Oceanside, CA 92056',
-      dateLine: '06 de Junio de 2026 a la 1:00 pm',
-      follow: 'Recepción a continuación',
+      dateLine: '06 de Junio de 2026',
+      timeLine: 'Misa a la 1:00 pm',
+      follow: 'Recepción',
       receptionName: 'Aria Event Hall',
       receptionAddress1: '740 Nordahl Rd Ste 125',
       receptionAddress2: 'San Marcos, CA 92069',
-      receptionDateLine: '06 de Junio de 2026 a las 4:30 pm',
+      receptionDateLine: 'a las 4:30 pm',
     },
     menu: {
       date: '06 Junio 2026',

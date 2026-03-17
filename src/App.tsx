@@ -793,6 +793,9 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
               draggable={false}
             />
           </div>
+          <div className="mt-6 text-center font-display text-base font-bold tracking-[0.18em] opacity-100 md:text-lg">
+            {t.venue.dateLine}
+          </div>
         </FadeIn>
 
         {/* Mobile: 3rd. Desktop: left col, below title/at */}
@@ -814,8 +817,12 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
             <div>{t.venue.address1}</div>
             <div>{t.venue.address2}</div>
           </a>
-          <div className="mt-5 font-display text-base font-bold tracking-[0.18em] opacity-100">{t.venue.dateLine}</div>
-          <div className="mt-1 font-display text-[11px] tracking-[0.24em] opacity-80">{t.venue.follow}</div>
+          <div className="mt-4 font-display text-base font-bold tracking-[0.18em] opacity-100 md:text-lg">
+            {t.venue.timeLine}
+          </div>
+          <div className="mt-4 font-display text-[11px] tracking-[0.24em] opacity-80 md:text-xs">
+            {t.venue.follow}
+          </div>
           <a
             href="https://maps.app.goo.gl/AqAJ7XpT1PwZxhwu9"
             target="_blank"
