@@ -257,6 +257,10 @@
         white-space: normal;
       }
 
+      .action-cell {
+        text-align: center;
+      }
+
       .status {
         margin-top: 12px;
         font-size: 12px;
@@ -273,6 +277,44 @@
 
       .error {
         color: var(--danger);
+      }
+
+      .action-btn {
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid rgba(55, 65, 81, 0.9);
+        background: rgba(15, 23, 42, 0.96);
+        color: var(--muted);
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .action-btn.delete {
+        border-color: rgba(248, 113, 113, 0.7);
+        color: #fecaca;
+      }
+
+      .action-btn.restore {
+        border-color: rgba(52, 211, 153, 0.7);
+        color: #bbf7d0;
+      }
+
+      .row-deleted td {
+        opacity: 0.6;
+      }
+
+      .deleted-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 8px;
+        border-radius: 999px;
+        border: 1px solid rgba(248, 113, 113, 0.7);
+        font-size: 10px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #fecaca;
       }
 
       a.link {
@@ -436,7 +478,7 @@
             >
               <option value="30">Last 30 days</option>
               <option value="7">Last 7 days</option>
-              <option value="1">Today</option>
+              <option value="1">Last 24 hours</option>
             </select>
           </div>
           <div class="table-meta" id="meta-chart"></div>
@@ -449,7 +491,26 @@
       <div class="table-card">
         <div class="table-header">
           <div class="table-title">Submissions</div>
-          <div class="table-meta" id="meta-summary"></div>
+          <div class="table-meta">
+            <span id="meta-summary-text"></span>
+          </div>
+        </div>
+        <div
+          class="table-meta"
+          style="
+            margin: 0 0 6px 0;
+            display: flex;
+            justify-content: flex-end;
+          "
+        >
+          <label style="font-size: 11px; cursor: pointer;">
+            <input
+              id="show-deleted-toggle"
+              type="checkbox"
+              style="margin-right: 4px;"
+            />
+            Show deleted
+          </label>
         </div>
         <div class="table-wrapper">
           <table>
@@ -462,6 +523,7 @@
                 <th>Email</th>
                 <th>Guest names</th>
                 <th>Message</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="tbody-rows">
@@ -482,13 +544,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script>
       const ENDPOINT =
-        'https://script.google.com/macros/s/AKfycbzaenzy0NYpi1rbYu-XO17wTAhvdoQ3wqyubqvVIFq-qIaq1w5M1jji63T9_rBVJ8Cf2Q/exec';
+        'https://script.google.com/macros/s/AKfycbzrTt8PoPbtH2VAJ1kTL4xGw8FkZkEEb-6wruCxVzHE7het6uOv48lASns_ZWimjFPpjQ/exec';
       const JSONP_CALLBACK = '__rsvp_jsonp_cb';
       const PIN_CODE = '6598';
       const PIN_STORAGE_KEY = 'rsvp_admin_pin_ok';
       const RANGE_STORAGE_KEY = 'rsvp_admin_range_days';
       let rangeDays = 30;
       let allRowsCache = [];
+      let includeDeleted = false;
 
       function formatDate(value) {
         if (!value) return '';
@@ -556,6 +619,7 @@
 
           const cleaned = rows
             .map((r) => ({
+              rowIndex: Number(r.rowIndex || 0),
               timestamp: r.timestamp,
               fullName: r.fullName || '',
               email: r.email || '',
@@ -563,6 +627,11 @@
               guestCount: Number(r.guestCount || 0),
               guestNames: r.guestNames || r.guestName || '',
               message: r.message || '',
+              deleted:
+                r.deleted === true ||
+                String(r.deleted || '')
+                  .toLowerCase()
+                  .trim() === 'true',
             }))
             .sort((a, b) => {
               const da = new Date(a.timestamp).getTime();
@@ -572,10 +641,12 @@
 
           allRowsCache = cleaned;
 
-          const total = cleaned.length;
-          const yes = cleaned.filter((r) => r.attendance === 'yes').length;
-          const no = cleaned.filter((r) => r.attendance === 'no').length;
-          const guests = cleaned
+          const active = cleaned.filter((r) => !r.deleted);
+
+          const total = active.length;
+          const yes = active.filter((r) => r.attendance === 'yes').length;
+          const no = active.filter((r) => r.attendance === 'no').length;
+          const guests = active
             .filter((r) => r.attendance === 'yes')
             .reduce((sum, r) => sum + (isFinite(r.guestCount) ? r.guestCount : 0), 0);
 
@@ -597,10 +668,13 @@
 
           applyRangeAndRender();
 
-          document.getElementById('meta-summary').textContent =
-            total === 0
-              ? 'No submissions yet.'
-              : `${total} submission${total === 1 ? '' : 's'} · ${yes} yes · ${no} no`;
+          const metaSummaryEl = document.getElementById('meta-summary-text');
+          if (metaSummaryEl) {
+            metaSummaryEl.textContent =
+              total === 0
+                ? 'No submissions yet.'
+                : `${total} submission${total === 1 ? '' : 's'} · ${yes} yes · ${no} no`;
+          }
 
           statusEl.innerHTML =
             '<span class="strong">Live</span><span>Data loaded from Google Sheets. Refresh this page to fetch the latest RSVPs.</span>';
@@ -624,27 +698,51 @@
       function inRange(ts) {
         const t = new Date(ts);
         if (Number.isNaN(t.getTime())) return false;
-        const start = startOfLocalDay(new Date());
+
+        const now = new Date();
+
+        if (rangeDays === 1) {
+          // Last 24 hours window
+          const start = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+          return t.getTime() >= start.getTime() && t.getTime() <= now.getTime();
+        }
+
+        // Last N full calendar days (including today)
+        const start = startOfLocalDay(now);
         start.setDate(start.getDate() - (rangeDays - 1));
         return t.getTime() >= start.getTime();
       }
 
       function applyRangeAndRender() {
-        const filtered = allRowsCache.filter((r) => inRange(r.timestamp));
-        renderChart(filtered);
-        renderTable(filtered);
+        const timeFiltered = allRowsCache.filter((r) => inRange(r.timestamp));
+        const forChartAndStats = timeFiltered.filter((r) => !r.deleted);
+        const forTable = includeDeleted ? timeFiltered : forChartAndStats;
+
+        renderChart(forChartAndStats);
+        renderTable(forTable, forChartAndStats.length, timeFiltered.length);
       }
 
-      function renderTable(rows) {
+      function renderTable(rows, activeCount, totalInRange) {
         const bodyEl = document.getElementById('tbody-rows');
-        const meta = document.getElementById('meta-summary');
+        const meta = document.getElementById('meta-summary-text');
         const shown = rows.length;
-        const yes = rows.filter((r) => r.attendance === 'yes').length;
-        const no = rows.filter((r) => r.attendance === 'no').length;
-        meta.textContent =
-          shown === 0
-            ? `No submissions in selected range.`
-            : `${shown} shown · ${yes} yes · ${no} no`;
+        const yes = rows.filter((r) => !r.deleted && r.attendance === 'yes').length;
+        const no = rows.filter((r) => !r.deleted && r.attendance === 'no').length;
+
+        if (shown === 0) {
+          if (meta) meta.textContent = 'No submissions in selected range.';
+        } else {
+          const deletedCount = rows.filter((r) => r.deleted).length;
+          const parts = [
+            `${activeCount} active`,
+            `${yes} yes`,
+            `${no} no`,
+          ];
+          if (includeDeleted && deletedCount > 0) {
+            parts.push(`${deletedCount} deleted (hidden from stats)`);
+          }
+          if (meta) meta.textContent = parts.join(' · ');
+        }
 
         if (shown === 0) {
           bodyEl.innerHTML =
@@ -667,8 +765,12 @@
                 ? 'No'
                 : r.attendance || '—';
 
+            const rowClass = r.deleted ? 'row-deleted' : '';
+            const actionLabel = r.deleted ? 'Restore' : 'Delete';
+            const actionClass = r.deleted ? 'restore' : 'delete';
+
             return `
-              <tr>
+              <tr class="${rowClass}">
                 <td class="nowrap muted">${escapeHtml(formatDate(r.timestamp))}</td>
                 <td class="nowrap">${escapeHtml(r.fullName || '—')}</td>
                 <td>
@@ -680,33 +782,79 @@
                 <td class="nowrap muted">${escapeHtml(r.email || '—')}</td>
                 <td class="message muted">${escapeHtml(r.guestNames || '—')}</td>
                 <td class="message">${escapeHtml(r.message || '')}</td>
+                <td class="action-cell">
+                  ${
+                    r.rowIndex
+                      ? `<button class="action-btn ${actionClass}" onclick="handleDeleteClick(${r.rowIndex}, ${r.deleted ? 'true' : 'false'})">${actionLabel}</button>`
+                      : '—'
+                  }
+                </td>
               </tr>
             `;
           })
           .join('');
       }
 
+      function setupDeletedToggle() {
+        const toggle = document.getElementById('show-deleted-toggle');
+        if (!toggle) return;
+        toggle.checked = includeDeleted;
+        toggle.addEventListener('change', () => {
+          includeDeleted = toggle.checked;
+          applyRangeAndRender();
+        });
+      }
+
       function renderChart(rows) {
         const ctx = document.getElementById('submissionsChart').getContext('2d');
         const metaEl = document.getElementById('meta-chart');
 
-        const today = startOfLocalDay(new Date());
         const labels = [];
         const data = [];
-        for (let i = rangeDays - 1; i >= 0; i--) {
-          const d = new Date(today);
-          d.setDate(d.getDate() - i);
-          const key = d.toISOString().slice(0, 10);
-          labels.push(
-            d.toLocaleDateString(undefined, { month: '2-digit', day: '2-digit' }),
-          );
-          const count = rows.filter((r) => {
-            const t = new Date(r.timestamp);
-            if (Number.isNaN(t.getTime())) return false;
-            const k = t.toISOString().slice(0, 10);
-            return k === key;
-          }).length;
-          data.push(count);
+
+        if (rangeDays === 1) {
+          // Last 24 hours, bucketed by hour
+          const now = new Date();
+          for (let i = 23; i >= 0; i--) {
+            const slotStart = new Date(now.getTime() - (i + 1) * 60 * 60 * 1000);
+            const slotEnd = new Date(now.getTime() - i * 60 * 60 * 1000);
+
+            labels.push(
+              slotStart.toLocaleTimeString(undefined, {
+                hour: '2-digit',
+                minute: '2-digit',
+              }),
+            );
+
+            const count = rows.filter((r) => {
+              const t = new Date(r.timestamp);
+              if (Number.isNaN(t.getTime())) return false;
+              return t.getTime() >= slotStart.getTime() && t.getTime() < slotEnd.getTime();
+            }).length;
+
+            data.push(count);
+          }
+        } else {
+          // Last N days, bucketed by day
+          const today = startOfLocalDay(new Date());
+          for (let i = rangeDays - 1; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(d.getDate() - i);
+            const key = d.toISOString().slice(0, 10);
+            labels.push(
+              d.toLocaleDateString(undefined, {
+                month: '2-digit',
+                day: '2-digit',
+              }),
+            );
+            const count = rows.filter((r) => {
+              const t = new Date(r.timestamp);
+              if (Number.isNaN(t.getTime())) return false;
+              const k = t.toISOString().slice(0, 10);
+              return k === key;
+            }).length;
+            data.push(count);
+          }
         }
 
         if (chartInstance) {
@@ -783,6 +931,46 @@
         });
       }
 
+      function handleDeleteClick(rowIndex, currentlyDeleted) {
+        if (!rowIndex || rowIndex < 2) return;
+
+        const shouldDelete = !currentlyDeleted;
+        const action = shouldDelete ? 'delete' : 'undelete';
+        const verb = shouldDelete ? 'delete this submission?' : 'restore this submission?';
+
+        if (!confirm(`Are you sure you want to ${verb}`)) {
+          return;
+        }
+
+        const statusEl = document.getElementById('status-line');
+        statusEl.innerHTML =
+          '<span class="strong">Working…</span><span>Updating Google Sheet entry.</span>';
+
+        loadJsonp(
+          ENDPOINT +
+            `?action=${encodeURIComponent(action)}&row=${encodeURIComponent(rowIndex)}`,
+        )
+          .then(() => {
+            return loadRsvps();
+          })
+          .catch((err) => {
+            console.error(err);
+            statusEl.innerHTML =
+              '<span class="error">Error:</span><span>Could not update row. Check the Apps Script log.</span>';
+          });
+      }
+
+      function selectRowForAction(rowIndex) {
+        if (!rowIndex || rowIndex < 2) {
+          selectedRowIndexForAction = null;
+        } else if (selectedRowIndexForAction === rowIndex) {
+          selectedRowIndexForAction = null;
+        } else {
+          selectedRowIndexForAction = rowIndex;
+        }
+        applyRangeAndRender();
+      }
+
       function setupLockscreen() {
         const lockEl = document.getElementById('lockscreen');
         const inputEl = document.getElementById('pin-input');
@@ -798,6 +986,8 @@
           if (value === PIN_CODE) {
             localStorage.setItem(PIN_STORAGE_KEY, 'ok');
             lockEl.style.display = 'none';
+            setupRangePicker();
+            setupDeletedToggle();
             loadRsvps();
           } else {
             errEl.textContent = 'Incorrect PIN.';
@@ -814,6 +1004,7 @@
         if (localStorage.getItem(PIN_STORAGE_KEY) === 'ok') {
           lockEl.style.display = 'none';
           setupRangePicker();
+          setupDeletedToggle();
           loadRsvps();
         } else {
           inputEl.focus();
