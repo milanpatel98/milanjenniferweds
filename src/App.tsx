@@ -1017,7 +1017,7 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
         message,
       }
 
-      await fetch('https://script.google.com/macros/s/AKfycby0eUX5UK6_RugNgCXJWJgAWZ4GHjedxAPYkia0glXVPiF9pz9_Tl0mHRgqGQrNlY_yyA/exec', {
+      await fetch('https://script.google.com/macros/s/AKfycbzaenzy0NYpi1rbYu-XO17wTAhvdoQ3wqyubqvVIFq-qIaq1w5M1jji63T9_rBVJ8Cf2Q/exec', {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },

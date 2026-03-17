@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Wedding RSVP Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      :root {
+        --bg: #0f172a;
+        --card: #111827;
+        --accent: #fbbf24;
+        --accent-soft: rgba(251, 191, 36, 0.1);
+        --text: #f9fafb;
+        --muted: #9ca3af;
+        --danger: #f87171;
+        --success: #4ade80;
+        --border: #1f2937;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+          sans-serif;
+        background: radial-gradient(circle at top left, #111827, #020617);
+        color: var(--text);
+      }
+
+      .shell {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 32px 16px 40px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .title {
+        font-size: 24px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .subtitle {
+        font-size: 14px;
+        color: var(--muted);
+      }
+
+      .pill {
+        padding: 4px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        background: rgba(15, 23, 42, 0.8);
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 640px) {
+        .grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      .card {
+        border-radius: 18px;
+        background: radial-gradient(circle at top left, #111827, #020617);
+        border: 1px solid var(--border);
+        padding: 14px 16px 16px;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.8);
+      }
+
+      .card-label {
+        font-size: 11px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 8px;
+      }
+
+      .card-value {
+        font-size: 26px;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .card-note {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+
+      .card-value.accent {
+        color: var(--accent);
+      }
+
+      .card-value.success {
+        color: var(--success);
+      }
+
+      .card-value.danger {
+        color: var(--danger);
+      }
+
+      .table-card {
+        border-radius: 20px;
+        background: rgba(15, 23, 42, 0.96);
+        border: 1px solid var(--border);
+        padding: 18px 18px 10px;
+        box-shadow: 0 18px 50px rgba(15, 23, 42, 1);
+        overflow: hidden;
+      }
+
+      .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        margin-bottom: 10px;
+        gap: 12px;
+      }
+
+      .table-title {
+        font-size: 13px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      .table-meta {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .table-wrapper {
+        max-height: 420px;
+        overflow: auto;
+        border-radius: 12px;
+        border: 1px solid rgba(31, 41, 55, 0.9);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 12px;
+        background: rgba(15, 23, 42, 0.96);
+      }
+
+      thead {
+        background: rgba(15, 23, 42, 0.98);
+        position: sticky;
+        top: 0;
+        z-index: 1;
+      }
+
+      th,
+      td {
+        padding: 9px 10px;
+        text-align: left;
+        border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+        white-space: nowrap;
+      }
+
+      th {
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+
+      td {
+        font-size: 12px;
+        color: var(--text);
+      }
+
+      tbody tr:nth-child(odd) {
+        background: rgba(15, 23, 42, 0.95);
+      }
+
+      tbody tr:nth-child(even) {
+        background: rgba(15, 23, 42, 0.9);
+      }
+
+      .pill-attendance {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 8px;
+        border-radius: 999px;
+        font-size: 11px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .pill-attendance.yes {
+        background: rgba(52, 211, 153, 0.15);
+        color: var(--success);
+        border: 1px solid rgba(52, 211, 153, 0.5);
+      }
+
+      .pill-attendance.no {
+        background: rgba(248, 113, 113, 0.12);
+        color: var(--danger);
+        border: 1px solid rgba(248, 113, 113, 0.6);
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 20px;
+        height: 20px;
+        border-radius: 999px;
+        border: 1px solid rgba(55, 65, 81, 0.9);
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
+        background: rgba(15, 23, 42, 1);
+      }
+
+      .nowrap {
+        white-space: nowrap;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .message {
+        max-width: 260px;
+        white-space: normal;
+      }
+
+      .status {
+        margin-top: 12px;
+        font-size: 12px;
+        color: var(--muted);
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .status span.strong {
+        color: var(--accent);
+      }
+
+      .error {
+        color: var(--danger);
+      }
+
+      a.link {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      a.link:hover {
+        text-decoration: underline;
+      }
+
+      .lockscreen {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle at top left, #020617, #020617);
+        z-index: 20;
+      }
+
+      .lock-card {
+        width: 100%;
+        max-width: 340px;
+        border-radius: 20px;
+        padding: 22px 20px 20px;
+        background: rgba(15, 23, 42, 0.98);
+        border: 1px solid #1f2937;
+        box-shadow: 0 22px 50px rgba(15, 23, 42, 1);
+        text-align: left;
+      }
+
+      .lock-title {
+        font-size: 13px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 10px;
+      }
+
+      .lock-heading {
+        font-size: 18px;
+        margin-bottom: 14px;
+      }
+
+      .lock-input {
+        width: 100%;
+        margin-top: 6px;
+        padding: 10px 12px;
+        border-radius: 999px;
+        border: 1px solid #374151;
+        background: #020617;
+        color: var(--text);
+        font-size: 14px;
+        text-align: center;
+        letter-spacing: 0.3em;
+      }
+
+      .lock-input:focus {
+        outline: none;
+        border-color: var(--accent);
+      }
+
+      .lock-button {
+        width: 100%;
+        margin-top: 12px;
+        padding: 9px 12px;
+        border-radius: 999px;
+        border: none;
+        background: var(--accent);
+        color: #111827;
+        font-size: 13px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        cursor: pointer;
+      }
+
+      .lock-button:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+
+      .lock-error {
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--danger);
+        min-height: 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="lockscreen" id="lockscreen">
+      <div class="lock-card">
+        <div class="lock-title">Private access</div>
+        <div class="lock-heading">Enter admin PIN</div>
+        <div style="font-size: 12px; color: var(--muted); margin-bottom: 8px;">
+          This dashboard is only for you. Enter the 4‑digit code to continue.
+        </div>
+        <input
+          id="pin-input"
+          class="lock-input"
+          maxlength="4"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="••••"
+        />
+        <button id="pin-button" class="lock-button">Unlock</button>
+        <div id="pin-error" class="lock-error"></div>
+      </div>
+    </div>
+
+    <div class="shell">
+      <div class="header">
+        <div>
+          <div class="title">Wedding RSVP</div>
+          <div class="subtitle">Private dashboard (Google Sheets backend)</div>
+        </div>
+        <div class="pill">Admin · Milan &amp; Jennifer</div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="card-label">Total submissions</div>
+          <div id="metric-total" class="card-value accent">–</div>
+          <div class="card-note" id="metric-total-note"></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Will attend</div>
+          <div id="metric-yes" class="card-value success">–</div>
+          <div class="card-note" id="metric-yes-note"></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Cannot make it</div>
+          <div id="metric-no" class="card-value danger">–</div>
+          <div class="card-note" id="metric-no-note"></div>
+        </div>
+        <div class="card">
+          <div class="card-label">Total guests (yes only)</div>
+          <div id="metric-guests" class="card-value accent">–</div>
+          <div class="card-note" id="metric-guests-note"></div>
+        </div>
+      </div>
+
+      <div class="table-card" style="margin-top: 8px; margin-bottom: 20px;">
+        <div class="table-header">
+          <div class="table-title">Submissions · last 30 days</div>
+          <div class="table-meta" id="meta-chart"></div>
+        </div>
+        <div style="height: 220px;">
+          <canvas id="submissionsChart"></canvas>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <div class="table-title">Submissions</div>
+          <div class="table-meta" id="meta-summary"></div>
+        </div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Name</th>
+                <th>Attendance</th>
+                <th>Guests</th>
+                <th>Email</th>
+                <th>Guest names</th>
+                <th>Message</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-rows">
+              <tr>
+                <td colspan="7" class="muted" style="text-align: center">
+                  Loading RSVPs…
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="status" id="status-line">
+          <span>Fetching data from Google Sheets…</span>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script>
+      const ENDPOINT =
+        'https://script.google.com/macros/s/AKfycbzaenzy0NYpi1rbYu-XO17wTAhvdoQ3wqyubqvVIFq-qIaq1w5M1jji63T9_rBVJ8Cf2Q/exec';
+      const JSONP_CALLBACK = '__rsvp_jsonp_cb';
+      const PIN_CODE = '6598';
+      const PIN_STORAGE_KEY = 'rsvp_admin_pin_ok';
+
+      function formatDate(value) {
+        if (!value) return '';
+        try {
+          const d = new Date(value);
+          if (Number.isNaN(d.getTime())) return String(value);
+          return d.toLocaleString(undefined, {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          });
+        } catch {
+          return String(value);
+        }
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function loadJsonp(url) {
+        return new Promise((resolve, reject) => {
+          const cbName = JSONP_CALLBACK + '_' + Math.random().toString(36).slice(2);
+          const script = document.createElement('script');
+          const timeout = setTimeout(() => {
+            cleanup();
+            reject(new Error('JSONP timeout'));
+          }, 12000);
+
+          function cleanup() {
+            clearTimeout(timeout);
+            delete window[cbName];
+            script.remove();
+          }
+
+          window[cbName] = (data) => {
+            cleanup();
+            resolve(data);
+          };
+
+          const sep = url.includes('?') ? '&' : '?';
+          script.src = url + sep + 'callback=' + encodeURIComponent(cbName);
+          script.onerror = () => {
+            cleanup();
+            reject(new Error('JSONP failed to load'));
+          };
+
+          document.head.appendChild(script);
+        });
+      }
+
+      async function loadRsvps() {
+        const statusEl = document.getElementById('status-line');
+        const bodyEl = document.getElementById('tbody-rows');
+
+        try {
+          const rows = await loadJsonp(ENDPOINT);
+
+          const cleaned = rows
+            .map((r) => ({
+              timestamp: r.timestamp,
+              fullName: r.fullName || '',
+              email: r.email || '',
+              attendance: (r.attendance || '').toString().toLowerCase(),
+              guestCount: Number(r.guestCount || 0),
+              guestNames: r.guestNames || r.guestName || '',
+              message: r.message || '',
+            }))
+            .sort((a, b) => {
+              const da = new Date(a.timestamp).getTime();
+              const db = new Date(b.timestamp).getTime();
+              return db - da;
+            });
+
+          const total = cleaned.length;
+          const yes = cleaned.filter((r) => r.attendance === 'yes').length;
+          const no = cleaned.filter((r) => r.attendance === 'no').length;
+          const guests = cleaned
+            .filter((r) => r.attendance === 'yes')
+            .reduce((sum, r) => sum + (isFinite(r.guestCount) ? r.guestCount : 0), 0);
+
+          document.getElementById('metric-total').textContent = total;
+          document.getElementById('metric-total-note').textContent =
+            'All submissions, including yes & no.';
+
+          document.getElementById('metric-yes').textContent = yes;
+          document.getElementById('metric-yes-note').textContent =
+            'Guests who will attend.';
+
+          document.getElementById('metric-no').textContent = no;
+          document.getElementById('metric-no-note').textContent =
+            'Guests who cannot make it.';
+
+          document.getElementById('metric-guests').textContent = guests;
+          document.getElementById('metric-guests-note').textContent =
+            'Sum of guestCount where attendance is yes.';
+
+          renderChart(cleaned);
+
+          document.getElementById('meta-summary').textContent =
+            total === 0
+              ? 'No submissions yet.'
+              : `${total} submission${total === 1 ? '' : 's'} · ${yes} yes · ${no} no`;
+
+          if (total === 0) {
+            bodyEl.innerHTML =
+              '<tr><td colspan="7" class="muted" style="text-align:center">No RSVPs yet.</td></tr>';
+          } else {
+            bodyEl.innerHTML = cleaned
+              .map((r) => {
+                const pillClass =
+                  r.attendance === 'yes'
+                    ? 'pill-attendance yes'
+                    : r.attendance === 'no'
+                    ? 'pill-attendance no'
+                    : 'muted';
+                const pillLabel =
+                  r.attendance === 'yes'
+                    ? 'Yes'
+                    : r.attendance === 'no'
+                    ? 'No'
+                    : r.attendance || '—';
+
+                return `
+                  <tr>
+                    <td class="nowrap muted">${escapeHtml(formatDate(r.timestamp))}</td>
+                    <td class="nowrap">${escapeHtml(r.fullName || '—')}</td>
+                    <td>
+                      <span class="${pillClass}">
+                        <span>${escapeHtml(pillLabel)}</span>
+                      </span>
+                    </td>
+                    <td><span class="badge">${isFinite(r.guestCount) ? r.guestCount : '—'}</span></td>
+                    <td class="nowrap muted">${escapeHtml(r.email || '—')}</td>
+                    <td class="message muted">${escapeHtml(r.guestNames || '—')}</td>
+                    <td class="message">${escapeHtml(r.message || '')}</td>
+                  </tr>
+                `;
+              })
+              .join('');
+          }
+
+          statusEl.innerHTML =
+            '<span class="strong">Live</span><span>Data loaded from Google Sheets. Refresh this page to fetch the latest RSVPs.</span>';
+        } catch (err) {
+          console.error(err);
+          bodyEl.innerHTML =
+            '<tr><td colspan="7" class="error" style="text-align:center">Failed to load RSVPs. Open the browser console for details.</td></tr>';
+          statusEl.innerHTML =
+            '<span class="error">Error:</span><span>Could not fetch data. Make sure Apps Script `doGet` supports JSONP (`callback=`) and that the Web app is deployed with access set to "Anyone".</span>';
+        }
+      }
+
+      let chartInstance = null;
+
+      function renderChart(rows) {
+        const ctx = document.getElementById('submissionsChart').getContext('2d');
+        const metaEl = document.getElementById('meta-chart');
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const labels = [];
+        const data = [];
+        for (let i = 29; i >= 0; i--) {
+          const d = new Date(today);
+          d.setDate(d.getDate() - i);
+          const key = d.toISOString().slice(0, 10);
+          labels.push(
+            d.toLocaleDateString(undefined, { month: '2-digit', day: '2-digit' }),
+          );
+          const count = rows.filter((r) => {
+            const t = new Date(r.timestamp);
+            if (Number.isNaN(t.getTime())) return false;
+            const k = t.toISOString().slice(0, 10);
+            return k === key;
+          }).length;
+          data.push(count);
+        }
+
+        if (chartInstance) {
+          chartInstance.destroy();
+        }
+
+        chartInstance = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [
+              {
+                label: 'Submissions',
+                data,
+                borderColor: '#fbbf24',
+                backgroundColor: 'rgba(251, 191, 36, 0.2)',
+                borderWidth: 2,
+                tension: 0.35,
+                pointRadius: 2.5,
+                pointBackgroundColor: '#fbbf24',
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              x: {
+                ticks: {
+                  color: '#9ca3af',
+                  maxRotation: 0,
+                  autoSkip: true,
+                },
+                grid: {
+                  color: 'rgba(31,41,55,0.6)',
+                },
+              },
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  color: '#9ca3af',
+                  precision: 0,
+                },
+                grid: {
+                  color: 'rgba(31,41,55,0.6)',
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+            },
+          },
+        });
+
+        const total = data.reduce((a, b) => a + b, 0);
+        metaEl.textContent =
+          total === 0
+            ? 'No submissions in the last 30 days.'
+            : `${total} submission${total === 1 ? '' : 's'} in the last 30 days.`;
+      }
+
+      function setupLockscreen() {
+        const lockEl = document.getElementById('lockscreen');
+        const inputEl = document.getElementById('pin-input');
+        const btnEl = document.getElementById('pin-button');
+        const errEl = document.getElementById('pin-error');
+
+        function tryUnlock() {
+          const value = (inputEl.value || '').trim();
+          if (value.length === 0) {
+            errEl.textContent = 'Enter the 4‑digit PIN.';
+            return;
+          }
+          if (value === PIN_CODE) {
+            localStorage.setItem(PIN_STORAGE_KEY, 'ok');
+            lockEl.style.display = 'none';
+            loadRsvps();
+          } else {
+            errEl.textContent = 'Incorrect PIN.';
+          }
+        }
+
+        btnEl.addEventListener('click', tryUnlock);
+        inputEl.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            tryUnlock();
+          }
+        });
+
+        if (localStorage.getItem(PIN_STORAGE_KEY) === 'ok') {
+          lockEl.style.display = 'none';
+          loadRsvps();
+        } else {
+          inputEl.focus();
+        }
+      }
+
+      setupLockscreen();
+    </script>
+  </body>
+</html>
+
