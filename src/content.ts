@@ -88,7 +88,7 @@ export const COPY: Record<Lang, Copy> = {
     reveal: {
       title: 'Reveal',
       subtitle: 'SCRATCH TO DISCOVER THE DATE',
-      completeMessage: "We're getting married",
+      completeMessage: "We're getting married!",
       parts: { day: '06', month: 'June', year: '2026' },
     },
     countdown: {
@@ -171,7 +171,7 @@ export const COPY: Record<Lang, Copy> = {
     reveal: {
       title: 'Revelación',
       subtitle: 'RASPA PARA DESCUBRIR LA FECHA',
-      completeMessage: 'Nos casamos',
+      completeMessage: 'Nos casamos !',
       parts: { day: '06', month: 'Junio', year: '2026' },
     },
     countdown: {

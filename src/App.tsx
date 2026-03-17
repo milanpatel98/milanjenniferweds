@@ -782,8 +782,12 @@ function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
           <div className="inline-flex items-center justify-center rounded-full border border-[color:var(--brown-15)] bg-[color:var(--brown-08)] px-4 py-2">
             <img src={ASSETS.weddingRings} alt="" className="h-6 w-auto select-none [mix-blend-mode:darken]" style={{ filter: 'contrast(1.15)' }} draggable={false} />
           </div>
-          <div className="mt-6 font-display text-[10px] tracking-[0.35em] opacity-80 md:text-xs">{t.venue.title}</div>
-          <div className="mt-3 font-display text-[10px] tracking-[0.35em] opacity-80 md:text-xs">{t.venue.at}</div>
+          <div className="mt-6 font-display text-[10px] font-bold tracking-[0.35em] opacity-90 md:text-xs">
+            {t.venue.title}
+          </div>
+          <div className="mt-3 font-display text-[10px] font-bold tracking-[0.35em] opacity-90 md:text-xs">
+            {t.venue.at}
+          </div>
         </FadeIn>
 
         {/* Mobile: 2nd (after "AT", before venue name). Desktop: right col */}
