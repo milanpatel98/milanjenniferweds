@@ -7,6 +7,7 @@ const ASSETS = {
   curtainClosed: 'assets/curtain-closed-Bpkadld4.jpg',
   curtainOpen: 'assets/curtain-open-C9MqdT6G.jpg',
   curtainVideo: 'assets/curtain-video-BAKLj3Y5.mp4',
+  ganeshaIntro: 'assets/ganesh-intro.jpg',
   scratchGold: 'assets/scratch-gold-DQrdz0lH.png',
   venueIllustration: 'assets/venue-illustration.png',
   dresscodeIllustration: 'assets/dresscode-illustration-BT5yPEQh.png',
@@ -498,11 +499,17 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
 
         {phase === 'open' && (
           <motion.div
-            className="max-w-2xl pt-[4.5rem] md:pt-0"
+            className="relative max-w-2xl pt-[4.5rem] md:pt-0"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: 'easeOut', delay: 0.05 }}
           >
+            <img
+              src={ASSETS.ganeshaIntro}
+              alt=""
+              className="pointer-events-none select-none absolute -top-28 left-1/2 h-28 w-28 -translate-x-1/2 opacity-5 md:-top-32 md:h-32 md:w-32"
+              draggable={false}
+            />
             <div className="font-display text-[8px] tracking-[0.32em] text-[color:var(--brown)] opacity-95 md:text-[10px] md:tracking-[0.4em]">
               {t.intro.invited}
             </div>
