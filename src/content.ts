@@ -57,13 +57,16 @@ export type Copy = {
   rsvp: {
     title: string
     fullName: string
+    fullNamePlaceholder: string
     email: string
+    emailPlaceholder: string
     willAttend: string
     yes: string
     no: string
     guestCount: string
     guestNames: string
     message: string
+    messagePlaceholder: string
     submit: string
     required: string
     thanksTitle: string
@@ -142,13 +145,16 @@ export const COPY: Record<Lang, Copy> = {
     rsvp: {
       title: 'Confirm your attendance',
       fullName: 'FULL NAME *',
+      fullNamePlaceholder: 'Your name',
       email: 'EMAIL (OPTIONAL)',
+      emailPlaceholder: 'your@email.com',
       willAttend: 'WILL YOU ATTEND? *',
       yes: "Yes, I'll be there!",
       no: "No, I can't make it",
       guestCount: 'NUMBER OF GUESTS *',
       guestNames: 'GUEST NAMES (IF MORE THAN 1) *',
       message: 'MESSAGE FOR THE COUPLE (OPTIONAL)',
+      messagePlaceholder: 'Write us a few words...',
       submit: 'Confirm',
       required: 'Please fill out the required fields.',
       thanksTitle: 'Thank You',
@@ -225,13 +231,16 @@ export const COPY: Record<Lang, Copy> = {
     rsvp: {
       title: 'Confirma tu asistencia',
       fullName: 'NOMBRE COMPLETO *',
+      fullNamePlaceholder: 'Tu nombre',
       email: 'CORREO (OPCIONAL)',
+      emailPlaceholder: 'tu@email.com',
       willAttend: '¿ASISTIRÁS? *',
       yes: '¡Sí, estaré allí!',
       no: 'No puedo asistir',
       guestCount: 'NÚMERO DE INVITADOS *',
       guestNames: 'NOMBRES DE INVITADOS (SI MÁS DE 1) *',
       message: 'MENSAJE PARA LOS NOVIOS (OPCIONAL)',
+      messagePlaceholder: 'Escríbenos unas palabras...',
       submit: 'Confirmar',
       required: 'Por favor, completa los campos obligatorios.',
       thanksTitle: 'Gracias',

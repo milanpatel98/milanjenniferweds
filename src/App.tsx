@@ -1065,7 +1065,7 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
                     <label className="font-display text-[10px] tracking-[0.35em] opacity-85">{t.rsvp.fullName}</label>
                     <input
                       className="mt-2 w-full rounded-2xl border border-[color:var(--brown-15)] bg-white/70 px-4 py-3 font-body text-[14px] outline-none focus:border-[color:var(--brown-20)]"
-                      placeholder="Your name"
+                      placeholder={t.rsvp.fullNamePlaceholder}
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
                       autoComplete="name"
@@ -1076,7 +1076,7 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
                     <label className="font-display text-[10px] tracking-[0.35em] opacity-85">{t.rsvp.email}</label>
                     <input
                       className="mt-2 w-full rounded-2xl border border-[color:var(--brown-15)] bg-white/70 px-4 py-3 font-body text-[14px] outline-none focus:border-[color:var(--brown-20)]"
-                      placeholder="your@email.com"
+                      placeholder={t.rsvp.emailPlaceholder}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       autoComplete="email"
@@ -1171,7 +1171,7 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
                     <textarea
                       rows={3}
                       className="mt-2 w-full resize-none rounded-2xl border border-[color:var(--brown-15)] bg-white/70 px-4 py-3 font-body text-[14px] outline-none focus:border-[color:var(--brown-20)]"
-                      placeholder="Write us a few words..."
+                      placeholder={t.rsvp.messagePlaceholder}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                     />
