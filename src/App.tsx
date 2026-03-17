@@ -993,21 +993,43 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+
     const v = validate()
     if (v) {
       setError(v)
       return
     }
+
     if (website.trim()) {
-      // Bots.
+      // Bots: pretend success, do nothing.
       setSubmitted(true)
       return
     }
+
     setSubmitting(true)
     try {
-      // 1:1 UI: emulate async request
-      await new Promise((r) => setTimeout(r, 900))
+      const payload = {
+        fullName,
+        email,
+        attendance,
+        guestCount,
+        guestNames,
+        message,
+      }
+
+      const res = await fetch('https://formspree.io/f/xeerrykr', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+
+      if (!res.ok) {
+        throw new Error('Failed to send RSVP')
+      }
+
       setSubmitted(true)
+    } catch (err) {
+      setError('Something went wrong. Please try again.')
     } finally {
       setSubmitting(false)
     }
