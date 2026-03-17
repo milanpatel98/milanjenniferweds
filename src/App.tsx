@@ -467,7 +467,10 @@ function IntroCurtains({ t, onIntroComplete }: { t: (typeof COPY)[Lang]; onIntro
       <img
         src={phase === 'open' ? ASSETS.curtainOpen : ASSETS.curtainClosed}
         alt=""
-        className="absolute inset-0 h-full w-full object-cover object-[center_top] lg:object-center"
+        className={[
+          'absolute inset-0 h-full w-full object-cover object-[center_top] lg:object-center',
+          phase === 'opening' ? 'opacity-0' : 'opacity-100',
+        ].join(' ')}
         draggable={false}
       />
 
