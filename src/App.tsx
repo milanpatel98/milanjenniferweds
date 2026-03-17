@@ -1100,14 +1100,34 @@ function RsvpSection({ t }: { t: (typeof COPY)[Lang] }) {
                     <>
                       <div>
                         <label className="font-display text-[10px] tracking-[0.35em] opacity-85">{t.rsvp.guestCount}</label>
-                        <input
-                          type="number"
-                          min={1}
-                          max={10}
-                          value={guestCount}
-                          onChange={(e) => setGuestCount(clampInt(Number(e.target.value || '1'), 1, 10))}
-                          className="mt-2 w-full rounded-2xl border border-[color:var(--brown-15)] bg-white/70 px-4 py-3 font-body text-[14px] outline-none focus:border-[color:var(--brown-20)]"
-                        />
+                        <div className="mt-2 flex items-stretch gap-2">
+                          <input
+                            type="number"
+                            min={1}
+                            max={10}
+                            value={guestCount}
+                            onChange={(e) => setGuestCount(clampInt(Number(e.target.value || '1'), 1, 10))}
+                            className="w-full rounded-2xl border border-[color:var(--brown-15)] bg-white/70 px-4 py-3 font-body text-[14px] outline-none focus:border-[color:var(--brown-20)] [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setGuestCount((c) => clampInt(c - 1, 1, 10))}
+                            disabled={guestCount <= 1}
+                            className="flex h-[46px] w-12 shrink-0 items-center justify-center rounded-2xl border border-[color:var(--brown-15)] bg-white/70 text-[color:var(--brown)] transition disabled:opacity-40"
+                            aria-label="Decrease guests"
+                          >
+                            <span className="text-xl leading-none">−</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setGuestCount((c) => clampInt(c + 1, 1, 10))}
+                            disabled={guestCount >= 10}
+                            className="flex h-[46px] w-12 shrink-0 items-center justify-center rounded-2xl border border-[color:var(--brown-15)] bg-white/70 text-[color:var(--brown)] transition disabled:opacity-40"
+                            aria-label="Increase guests"
+                          >
+                            <span className="text-xl leading-none">+</span>
+                          </button>
+                        </div>
                       </div>
 
                       {guestCount > 1 && (
