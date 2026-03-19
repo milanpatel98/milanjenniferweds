@@ -714,12 +714,17 @@
       }
 
       function applyRangeAndRender() {
+        // Chart and stats respect the selected range.
         const timeFiltered = allRowsCache.filter((r) => inRange(r.timestamp));
         const forChartAndStats = timeFiltered.filter((r) => !r.deleted);
-        const forTable = includeDeleted ? timeFiltered : forChartAndStats;
+
+        // Table always shows ALL submissions (dropdown only changes the chart).
+        const allActiveRows = allRowsCache.filter((r) => !r.deleted);
+        const forTable = includeDeleted ? allRowsCache : allActiveRows;
+        const allActiveCount = allActiveRows.length;
 
         renderChart(forChartAndStats);
-        renderTable(forTable, forChartAndStats.length, timeFiltered.length);
+        renderTable(forTable, allActiveCount, timeFiltered.length);
       }
 
       function renderTable(rows, activeCount, totalInRange) {
@@ -730,7 +735,7 @@
         const no = rows.filter((r) => !r.deleted && r.attendance === 'no').length;
 
         if (shown === 0) {
-          if (meta) meta.textContent = 'No submissions in selected range.';
+          if (meta) meta.textContent = 'No submissions yet.';
         } else {
           const deletedCount = rows.filter((r) => r.deleted).length;
           const parts = [
@@ -746,7 +751,7 @@
 
         if (shown === 0) {
           bodyEl.innerHTML =
-            '<tr><td colspan="7" class="muted" style="text-align:center">No RSVPs in this range.</td></tr>';
+            '<tr><td colspan="7" class="muted" style="text-align:center">No RSVPs yet.</td></tr>';
           return;
         }
 
