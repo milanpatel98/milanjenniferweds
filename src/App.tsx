@@ -3,6 +3,43 @@ import type { ReactNode } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { COPY, type Lang } from './content'
 
+const LANG_PREF_KEY = 'nb_lang'
+const LANG_MANUAL_KEY = 'nb_lang_manual'
+
+function readManualLang(): Lang | null {
+  try {
+    if (localStorage.getItem(LANG_MANUAL_KEY) !== '1') return null
+    const raw = localStorage.getItem(LANG_PREF_KEY)
+    if (raw === 'en' || raw === 'es') return raw
+  } catch {
+    // ignore
+  }
+  return null
+}
+
+function detectBrowserLang(): Lang {
+  const candidates = [
+    ...(typeof navigator !== 'undefined' ? (navigator.languages ?? []) : []),
+    typeof navigator !== 'undefined' ? navigator.language : '',
+  ]
+    .filter(Boolean)
+    .map((l) => l.toLowerCase())
+
+  for (const tag of candidates) {
+    if (tag === 'es' || tag.startsWith('es-')) return 'es'
+  }
+  return 'en'
+}
+
+function persistManualLang(next: Lang) {
+  try {
+    localStorage.setItem(LANG_MANUAL_KEY, '1')
+    localStorage.setItem(LANG_PREF_KEY, next)
+  } catch {
+    // ignore
+  }
+}
+
 const ASSETS = {
   curtainClosed: 'assets/curtain-closed-Bpkadld4.jpg',
   curtainOpen: 'assets/curtain-open-C9MqdT6G.jpg',
@@ -318,11 +355,16 @@ function ScratchCircle({ value, isRevealed, onReveal, ariaLabel }: ScratchCircle
 }
 
 function App() {
-  const [lang, setLang] = useState<Lang>('en')
+  const [lang, setLang] = useState<Lang>(() => readManualLang() ?? detectBrowserLang())
   const [introComplete, setIntroComplete] = useState(false)
   const [revealComplete, setRevealComplete] = useState(false)
   const t = COPY[lang]
   const scrolled = useScrolled(80)
+
+  const setLangManual = (next: Lang) => {
+    persistManualLang(next)
+    setLang(next)
+  }
 
   useEffect(() => {
     if (introComplete) {
@@ -340,7 +382,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[color:var(--paper)] text-[color:var(--brown)]">
-      <TopBar lang={lang} setLang={setLang} scrolled={scrolled} label={t.topbar.label} />
+      <TopBar lang={lang} setLang={setLangManual} scrolled={scrolled} label={t.topbar.label} />
 
       <IntroCurtains t={t} onIntroComplete={() => setIntroComplete(true)} />
 
