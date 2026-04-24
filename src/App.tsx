@@ -355,6 +355,7 @@ function App() {
             <VenueSection t={t} />
             <DressCodeSection t={t} />
             <GiftsSection t={t} />
+            <AddToCalendarSection t={t} />
             <TransportSection t={t} />
             <RsvpSection t={t} />
           </>
@@ -906,6 +907,163 @@ function GiftsSection({ t }: { t: (typeof COPY)[Lang] }) {
           </div>
         </FadeIn>
 
+      </div>
+    </SectionShell>
+  )
+}
+
+function escapeIcsText(value: string) {
+  return value
+    .replace(/\\/g, '\\\\')
+    .replace(/\n/g, '\\n')
+    .replace(/;/g, '\\;')
+    .replace(/,/g, '\\,')
+}
+
+function foldIcsLine(line: string) {
+  const maxBytes = 75
+  const bytes = new TextEncoder().encode(line)
+  if (bytes.length <= maxBytes) return line
+
+  const out: string[] = []
+  let chunk = ''
+  for (const ch of line) {
+    const next = chunk + ch
+    if (new TextEncoder().encode(next).length > maxBytes) {
+      out.push(chunk)
+      chunk = ch
+    } else {
+      chunk = next
+    }
+  }
+  if (chunk) out.push(chunk)
+
+  return out.map((l, idx) => (idx === 0 ? l : ` ${l}`)).join('\r\n')
+}
+
+function formatIcsUtc(date: Date) {
+  return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
+}
+
+function buildWeddingCalendarIcs(t: (typeof COPY)[Lang]) {
+  const ceremonyStart = new Date('2026-06-06T13:00:00-07:00')
+  const ceremonyEnd = new Date(ceremonyStart.getTime() + 90 * 60 * 1000)
+
+  const receptionStart = new Date('2026-06-06T16:30:00-07:00')
+  const receptionEnd = new Date(receptionStart.getTime() + 5 * 60 * 60 * 1000)
+
+  const ceremonyLocation = `${t.venue.name}, ${t.venue.address1}, ${t.venue.address2}`
+  const receptionLocation = `${t.venue.receptionName}, ${t.venue.receptionAddress1}, ${t.venue.receptionAddress2}`
+
+  const ceremonySummary = `${t.intro.names.a} & ${t.intro.names.b} — ${t.venue.name}`
+  const receptionSummary = `${t.intro.names.a} & ${t.intro.names.b} — ${t.venue.receptionName}`
+
+  const ceremonyDescription = [
+    `${t.venue.dateLine} · ${t.venue.timeLine}`,
+    `Maps: ${MAPS_CHURCH}`,
+  ].join('\n')
+
+  const receptionDescription = [
+    `${t.venue.dateLine} · ${t.venue.receptionDateLine}`,
+    `Maps: ${MAPS_RECEPTION}`,
+  ].join('\n')
+
+  const dtStamp = formatIcsUtc(new Date())
+
+  const lines = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Nuestra Boda//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    'BEGIN:VEVENT',
+    `UID:${dtStamp}-ceremony@milanjenniferweds`,
+    `DTSTAMP:${dtStamp}`,
+    `DTSTART:${formatIcsUtc(ceremonyStart)}`,
+    `DTEND:${formatIcsUtc(ceremonyEnd)}`,
+    foldIcsLine(`SUMMARY:${escapeIcsText(ceremonySummary)}`),
+    foldIcsLine(`LOCATION:${escapeIcsText(ceremonyLocation)}`),
+    `DESCRIPTION:${escapeIcsText(ceremonyDescription)}`,
+    'END:VEVENT',
+    'BEGIN:VEVENT',
+    `UID:${dtStamp}-reception@milanjenniferweds`,
+    `DTSTAMP:${dtStamp}`,
+    `DTSTART:${formatIcsUtc(receptionStart)}`,
+    `DTEND:${formatIcsUtc(receptionEnd)}`,
+    foldIcsLine(`SUMMARY:${escapeIcsText(receptionSummary)}`),
+    foldIcsLine(`LOCATION:${escapeIcsText(receptionLocation)}`),
+    `DESCRIPTION:${escapeIcsText(receptionDescription)}`,
+    'END:VEVENT',
+    'END:VCALENDAR',
+  ]
+
+  // Fold long fields if needed (RFC 5545 line folding)
+  return lines
+    .map((l) => {
+      if (l.startsWith('DESCRIPTION:') || l.startsWith('SUMMARY:') || l.startsWith('LOCATION:')) {
+        return foldIcsLine(l)
+      }
+      return l
+    })
+    .join('\r\n')
+}
+
+function downloadTextFile(filename: string, contents: string, mime: string) {
+  const blob = new Blob([contents], { type: mime })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  window.setTimeout(() => URL.revokeObjectURL(url), 0)
+}
+
+function AddToCalendarSection({ t }: { t: (typeof COPY)[Lang] }) {
+  return (
+    <SectionShell>
+      <div className="mx-auto max-w-3xl text-center">
+        <FadeIn>
+          <div className="font-script text-5xl md:text-6xl">{t.addToCalendar.title}</div>
+          <div className="mx-auto mt-10 max-w-xl font-body text-[13px] leading-6 opacity-90 md:mt-12 md:text-[15px] md:leading-7">
+            {t.addToCalendar.line1}
+          </div>
+          <div className="mx-auto mt-3 max-w-xl font-body text-[13px] leading-6 opacity-90 md:text-[15px] md:leading-7">
+            {t.addToCalendar.line2}
+          </div>
+        </FadeIn>
+
+        <div className="mx-auto mt-12 max-w-md md:mt-14">
+          <FadeIn delay={0.08}>
+            <div className="mb-3 font-display text-[10px] tracking-[0.28em] text-[color:var(--brown)] opacity-80">
+              {t.addToCalendar.actionLabel}
+            </div>
+          </FadeIn>
+          <FadeIn delay={0.12}>
+            <button
+              type="button"
+              onClick={() => {
+                const ics = buildWeddingCalendarIcs(t)
+                downloadTextFile('milan-jennifer-wedding.ics', ics, 'text/calendar;charset=utf-8')
+              }}
+              className="flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-5 py-3.5 text-left transition hover:bg-[color:var(--brown-08)] active:scale-[0.99]"
+              aria-label={t.addToCalendar.button}
+            >
+              <span className="font-body text-[13px] font-medium text-[color:var(--brown)]">{t.addToCalendar.button}</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path
+                  d="M8 2v3M16 2v3M3.5 9.5h17M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </button>
+          </FadeIn>
+        </div>
       </div>
     </SectionShell>
   )

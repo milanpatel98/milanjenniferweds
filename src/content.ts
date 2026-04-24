@@ -47,6 +47,13 @@ export type Copy = {
     iban: string
     reference: string
   }
+  addToCalendar: {
+    title: string
+    line1: string
+    line2: string
+    actionLabel: string
+    button: string
+  }
   transport: {
     title: string
     body: string
@@ -134,6 +141,13 @@ export const COPY: Record<Lang, Copy> = {
       iban: 'IBAN: ES00 0000 0000 0000 0000 0000',
       reference: 'REFERENCE: Milan & Jennifer Wedding',
     },
+    addToCalendar: {
+      title: 'Add to calendar',
+      line1: 'Save both parts of our day in one tap.',
+      line2: 'Downloads a calendar file with the ceremony and reception.',
+      actionLabel: 'Calendar',
+      button: 'Add ceremony & reception',
+    },
     transport: {
       title: 'Getting There',
       body:
@@ -219,6 +233,13 @@ export const COPY: Record<Lang, Copy> = {
       accountHolder: 'TITULAR: MILAN & JENNIFER',
       iban: 'IBAN: ES00 0000 0000 0000 0000 0000',
       reference: 'CONCEPTO: Boda Milan & Jennifer',
+    },
+    addToCalendar: {
+      title: 'Añadir al calendario',
+      line1: 'Guarda las dos partes de nuestro día con un solo toque.',
+      line2: 'Descarga un archivo de calendario con la ceremonia y la recepción.',
+      actionLabel: 'Calendario',
+      button: 'Añadir ceremonia y recepción',
     },
     transport: {
       title: 'Cómo llegar',
