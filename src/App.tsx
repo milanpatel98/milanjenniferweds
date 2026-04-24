@@ -912,100 +912,32 @@ function GiftsSection({ t }: { t: (typeof COPY)[Lang] }) {
   )
 }
 
-function escapeIcsText(value: string) {
-  return value
-    .replace(/\\/g, '\\\\')
-    .replace(/\n/g, '\\n')
-    .replace(/;/g, '\\;')
-    .replace(/,/g, '\\,')
-}
-
-function foldIcsLine(line: string) {
-  const maxBytes = 75
-  const bytes = new TextEncoder().encode(line)
-  if (bytes.length <= maxBytes) return line
-
-  const out: string[] = []
-  let chunk = ''
-  for (const ch of line) {
-    const next = chunk + ch
-    if (new TextEncoder().encode(next).length > maxBytes) {
-      out.push(chunk)
-      chunk = ch
-    } else {
-      chunk = next
-    }
-  }
-  if (chunk) out.push(chunk)
-
-  return out.map((l, idx) => (idx === 0 ? l : ` ${l}`)).join('\r\n')
-}
-
-function formatIcsUtc(date: Date) {
-  return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z')
-}
-
-function buildWeddingCalendarIcs(t: (typeof COPY)[Lang]) {
-  const ceremonyStart = new Date('2026-06-06T13:00:00-07:00')
-  const ceremonyEnd = new Date(ceremonyStart.getTime() + 90 * 60 * 1000)
-
-  const receptionStart = new Date('2026-06-06T16:30:00-07:00')
-  const receptionEnd = new Date(receptionStart.getTime() + 5 * 60 * 60 * 1000)
-
-  const ceremonyLocation = `${t.venue.name}, ${t.venue.address1}, ${t.venue.address2}`
-  const receptionLocation = `${t.venue.receptionName}, ${t.venue.receptionAddress1}, ${t.venue.receptionAddress2}`
-
-  const ceremonySummary = `${t.intro.names.a} & ${t.intro.names.b} — ${t.venue.name}`
-  const receptionSummary = `${t.intro.names.a} & ${t.intro.names.b} — ${t.venue.receptionName}`
-
-  const ceremonyDescription = [
-    `${t.venue.dateLine} · ${t.venue.timeLine}`,
-    `Maps: ${MAPS_CHURCH}`,
-  ].join('\n')
-
-  const receptionDescription = [
-    `${t.venue.dateLine} · ${t.venue.receptionDateLine}`,
-    `Maps: ${MAPS_RECEPTION}`,
-  ].join('\n')
-
-  const dtStamp = formatIcsUtc(new Date())
-
-  const lines = [
+// Matches `milanpatel98/wedding-card` (`src/InvitationCard.jsx` → `addToCalendar`) exactly.
+function buildWeddingCardIcs() {
+  return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Nuestra Boda//EN',
-    'CALSCALE:GREGORIAN',
-    'METHOD:PUBLISH',
+    'PRODID:-//Milan & Jennifer Wedding//EN',
+    // Ceremony
     'BEGIN:VEVENT',
-    `UID:${dtStamp}-ceremony@milanjenniferweds`,
-    `DTSTAMP:${dtStamp}`,
-    `DTSTART:${formatIcsUtc(ceremonyStart)}`,
-    `DTEND:${formatIcsUtc(ceremonyEnd)}`,
-    foldIcsLine(`SUMMARY:${escapeIcsText(ceremonySummary)}`),
-    foldIcsLine(`LOCATION:${escapeIcsText(ceremonyLocation)}`),
-    `DESCRIPTION:${escapeIcsText(ceremonyDescription)}`,
+    'DTSTART:20260606T130000',
+    'DTEND:20260606T150000',
+    "SUMMARY:Jennifer & Milan's Wedding Ceremony",
+    'LOCATION:St Thomas Church\\, 1450 S Melrose Dr\\, Oceanside\\, CA 92056',
+    'DESCRIPTION:Please join us for the wedding of Jennifer Huitron and Milan Patel. Kindly RSVP by May 30th · 2026.',
+    'URL:https://milanpatel98.github.io/milanjenniferweds',
     'END:VEVENT',
+    // Reception
     'BEGIN:VEVENT',
-    `UID:${dtStamp}-reception@milanjenniferweds`,
-    `DTSTAMP:${dtStamp}`,
-    `DTSTART:${formatIcsUtc(receptionStart)}`,
-    `DTEND:${formatIcsUtc(receptionEnd)}`,
-    foldIcsLine(`SUMMARY:${escapeIcsText(receptionSummary)}`),
-    foldIcsLine(`LOCATION:${escapeIcsText(receptionLocation)}`),
-    `DESCRIPTION:${escapeIcsText(receptionDescription)}`,
+    'DTSTART:20260606T163000',
+    'DTEND:20260606T233000',
+    "SUMMARY:Jennifer & Milan's Wedding Reception",
+    'LOCATION:Aria Event Hall\\, 740 Nordahl Rd Ste 125\\, San Marcos\\, CA 92069',
+    'DESCRIPTION:Reception following the wedding ceremony of Jennifer Huitron and Milan Patel.',
+    'URL:https://milanpatel98.github.io/milanjenniferweds',
     'END:VEVENT',
     'END:VCALENDAR',
-  ]
-
-  // Fold long fields if needed (RFC 5545 line folding)
-  return lines
-    .map((l) => {
-      if (l.startsWith('DESCRIPTION:') || l.startsWith('SUMMARY:') || l.startsWith('LOCATION:')) {
-        return foldIcsLine(l)
-      }
-      return l
-    })
-    .join('\r\n')
+  ].join('\r\n')
 }
 
 function downloadTextFile(filename: string, contents: string, mime: string) {
@@ -1044,8 +976,8 @@ function AddToCalendarSection({ t }: { t: (typeof COPY)[Lang] }) {
             <button
               type="button"
               onClick={() => {
-                const ics = buildWeddingCalendarIcs(t)
-                downloadTextFile('milan-jennifer-wedding.ics', ics, 'text/calendar;charset=utf-8')
+                const ics = buildWeddingCardIcs()
+                downloadTextFile('jennifer-milan-wedding.ics', ics, 'text/calendar;charset=utf-8')
               }}
               className="flex w-full items-center justify-center gap-3 rounded-2xl bg-white px-5 py-3.5 text-left transition hover:bg-[color:var(--brown-08)] active:scale-[0.99]"
               aria-label={t.addToCalendar.button}
