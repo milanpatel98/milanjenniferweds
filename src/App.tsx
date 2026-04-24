@@ -958,10 +958,10 @@ function AddToCalendarSection({ t }: { t: (typeof COPY)[Lang] }) {
       <div className="mx-auto max-w-3xl text-center">
         <FadeIn>
           <div className="font-script text-5xl md:text-6xl">{t.addToCalendar.title}</div>
-          <div className="mx-auto mt-10 max-w-xl font-body text-[13px] leading-6 opacity-90 md:mt-12 md:text-[15px] md:leading-7">
+          <div className="mx-auto mt-8 max-w-xl font-body text-[13px] leading-6 opacity-90 md:mt-10 md:text-[15px] md:leading-7">
             {t.addToCalendar.line1}
           </div>
-          <div className="mx-auto mt-3 max-w-xl font-body text-[13px] leading-6 opacity-90 md:text-[15px] md:leading-7">
+          <div className="mx-auto mt-2 max-w-xl font-body text-[13px] leading-6 opacity-90 md:text-[15px] md:leading-7">
             {t.addToCalendar.line2}
           </div>
         </FadeIn>
