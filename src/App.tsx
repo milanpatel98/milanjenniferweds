@@ -5,6 +5,8 @@ import { COPY, type Lang } from './content'
 
 const LANG_PREF_KEY = 'nb_lang'
 const LANG_MANUAL_KEY = 'nb_lang_manual'
+const LANG_RULE_VERSION_KEY = 'nb_lang_rules'
+const LANG_RULE_VERSION = '2'
 
 function readManualLang(): Lang | null {
   try {
@@ -14,9 +16,11 @@ function readManualLang(): Lang | null {
     // New explicit manual flag
     if (localStorage.getItem(LANG_MANUAL_KEY) === '1') return raw
 
+    const rulesVersion = localStorage.getItem(LANG_RULE_VERSION_KEY)
+
     // Back-compat: older builds saved `nb_lang` without `nb_lang_manual`.
-    // Treat that as an explicit user choice so we don't unexpectedly override language.
-    if (raw) {
+    // Older saves should NOT block newer auto-detect behavior until the user explicitly chooses again.
+    if (raw && rulesVersion === LANG_RULE_VERSION) {
       localStorage.setItem(LANG_MANUAL_KEY, '1')
       return raw
     }
@@ -45,6 +49,7 @@ function persistManualLang(next: Lang) {
   try {
     localStorage.setItem(LANG_MANUAL_KEY, '1')
     localStorage.setItem(LANG_PREF_KEY, next)
+    localStorage.setItem(LANG_RULE_VERSION_KEY, LANG_RULE_VERSION)
   } catch {
     // ignore
   }
