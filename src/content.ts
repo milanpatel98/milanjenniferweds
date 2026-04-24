@@ -144,7 +144,7 @@ export const COPY: Record<Lang, Copy> = {
     addToCalendar: {
       title: 'Add to calendar',
       line1: 'Save both parts of our day in one tap.',
-      line2: 'Downloads a calendar file with the ceremony and reception.',
+      line2: 'Tap below to add the ceremony and reception to your calendar.',
       actionLabel: 'Calendar',
       button: 'Add ceremony & reception',
     },
@@ -237,7 +237,7 @@ export const COPY: Record<Lang, Copy> = {
     addToCalendar: {
       title: 'Añadir al calendario',
       line1: 'Guarda las dos partes de nuestro día con un solo toque.',
-      line2: 'Descarga un archivo de calendario con la ceremonia y la recepción.',
+      line2: 'Toca abajo para añadir la ceremonia y la recepción a tu calendario.',
       actionLabel: 'Calendario',
       button: 'Añadir ceremonia y recepción',
     },
