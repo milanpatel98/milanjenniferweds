@@ -8,9 +8,18 @@ const LANG_MANUAL_KEY = 'nb_lang_manual'
 
 function readManualLang(): Lang | null {
   try {
-    if (localStorage.getItem(LANG_MANUAL_KEY) !== '1') return null
     const raw = localStorage.getItem(LANG_PREF_KEY)
-    if (raw === 'en' || raw === 'es') return raw
+    if (raw !== 'en' && raw !== 'es') return null
+
+    // New explicit manual flag
+    if (localStorage.getItem(LANG_MANUAL_KEY) === '1') return raw
+
+    // Back-compat: older builds saved `nb_lang` without `nb_lang_manual`.
+    // Treat that as an explicit user choice so we don't unexpectedly override language.
+    if (raw) {
+      localStorage.setItem(LANG_MANUAL_KEY, '1')
+      return raw
+    }
   } catch {
     // ignore
   }
@@ -25,6 +34,7 @@ function detectBrowserLang(): Lang {
     .filter(Boolean)
     .map((l) => l.toLowerCase())
 
+  // If any preferred language is Spanish, default to ES (even if English is listed first).
   for (const tag of candidates) {
     if (tag === 'es' || tag.startsWith('es-')) return 'es'
   }
