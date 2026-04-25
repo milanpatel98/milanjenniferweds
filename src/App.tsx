@@ -779,6 +779,7 @@ function RevealSection({
         {showCountdown && (
           <div className="mt-48 md:mt-64 lg:mt-72">
             <CountdownSection t={t} />
+            <PostCountdownSection t={t} />
           </div>
         )}
       </div>
@@ -833,6 +834,22 @@ function CountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
         <div className="mt-4 font-display text-[10px] tracking-[0.35em] opacity-70 md:mt-6 md:text-xs">
           {t.countdown.until}
         </div>
+      </FadeIn>
+    </div>
+  )
+}
+
+function PostCountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
+  return (
+    <div className="mx-auto mt-14 max-w-2xl text-center md:mt-16">
+      <FadeIn delay={0.15}>
+        <div className="font-script text-4xl md:text-5xl">{t.afterCountdown.title}</div>
+      </FadeIn>
+      <FadeIn delay={0.22} className="mt-5">
+        <p className="font-body text-[13px] leading-7 opacity-90 md:text-[15px] md:leading-8">{t.afterCountdown.line1}</p>
+      </FadeIn>
+      <FadeIn delay={0.28} className="mt-3">
+        <p className="font-body text-[13px] leading-7 opacity-90 md:text-[15px] md:leading-8">{t.afterCountdown.line2}</p>
       </FadeIn>
     </div>
   )

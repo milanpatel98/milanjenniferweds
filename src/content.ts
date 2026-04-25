@@ -21,6 +21,11 @@ export type Copy = {
     until: string
     units: { days: string; hours: string; minutes: string; seconds: string }
   }
+  afterCountdown: {
+    title: string
+    line1: string
+    line2: string
+  }
   venue: {
     title: string
     extra: string
@@ -105,6 +110,11 @@ export const COPY: Record<Lang, Copy> = {
       title: 'Countdown',
       until: 'until the big day',
       units: { days: 'DAYS', hours: 'HOURS', minutes: 'MIN', seconds: 'SEC' },
+    },
+    afterCountdown: {
+      title: 'Save the date',
+      line1: 'We can’t wait to celebrate with you.',
+      line2: 'Details for the day are below—venue, dress code, and how to RSVP.',
     },
     venue: {
       title: 'THE CELEBRATION WILL TAKE PLACE',
@@ -198,6 +208,11 @@ export const COPY: Record<Lang, Copy> = {
       title: 'Cuenta atrás',
       until: 'hasta el gran día',
       units: { days: 'DÍAS', hours: 'HORAS', minutes: 'MIN', seconds: 'SEG' },
+    },
+    afterCountdown: {
+      title: 'Reserva la fecha',
+      line1: 'Estamos emocionados de celebrar contigo.',
+      line2: 'Más abajo encontrarás los detalles del día: lugar, código de vestimenta y cómo confirmar.',
     },
     venue: {
       title: 'LA CELEBRACIÓN TENDRÁ LUGAR',
