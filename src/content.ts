@@ -23,8 +23,12 @@ export type Copy = {
   }
   afterCountdown: {
     title: string
-    line1: string
-    line2: string
+    welcome1: string
+    welcome2: string
+    brideFamilyTitle: string
+    brideFamilyNames: string
+    groomFamilyTitle: string
+    groomFamilyNames: string
   }
   venue: {
     title: string
@@ -112,9 +116,13 @@ export const COPY: Record<Lang, Copy> = {
       units: { days: 'DAYS', hours: 'HOURS', minutes: 'MIN', seconds: 'SEC' },
     },
     afterCountdown: {
-      title: 'Save the date',
-      line1: 'We can’t wait to celebrate with you.',
-      line2: 'Details for the day are below—venue, dress code, and how to RSVP.',
+      title: 'With our families',
+      welcome1: 'We are so happy to begin this new chapter together, surrounded by the people who shaped us.',
+      welcome2: 'With love and gratitude, we welcome you into this celebration of our marriage.',
+      brideFamilyTitle: "Jennifer's family",
+      brideFamilyNames: 'Parents: [names]\nSiblings: [names]',
+      groomFamilyTitle: "Milan's family",
+      groomFamilyNames: 'Parents: [names]\nSiblings: [names]',
     },
     venue: {
       title: 'THE CELEBRATION WILL TAKE PLACE',
@@ -210,9 +218,14 @@ export const COPY: Record<Lang, Copy> = {
       units: { days: 'DÍAS', hours: 'HORAS', minutes: 'MIN', seconds: 'SEG' },
     },
     afterCountdown: {
-      title: 'Reserva la fecha',
-      line1: 'Estamos emocionados de celebrar contigo.',
-      line2: 'Más abajo encontrarás los detalles del día: lugar, código de vestimenta y cómo confirmar.',
+      title: 'Con nuestras familias',
+      welcome1:
+        'Estamos muy felices de comenzar este nuevo capítulo juntos, rodeados de las personas que nos formaron.',
+      welcome2: 'Con amor y gratitud, les damos la bienvenida a esta celebración de nuestro matrimonio.',
+      brideFamilyTitle: 'Familia de Jennifer',
+      brideFamilyNames: 'Padres: [nombres]\nHermanos: [nombres]',
+      groomFamilyTitle: 'Familia de Milan',
+      groomFamilyNames: 'Padres: [nombres]\nHermanos: [nombres]',
     },
     venue: {
       title: 'LA CELEBRACIÓN TENDRÁ LUGAR',
