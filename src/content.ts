@@ -122,7 +122,7 @@ export const COPY: Record<Lang, Copy> = {
       brideFamilyTitle: 'Jennifer',
       brideFamilyNames: ['Laura Cortes Gomez'],
       groomFamilyTitle: 'Milan',
-      groomFamilyNames: ['Maheshbhai Patel', 'Anitaben Patel', 'Pinalkumari Patel'],
+      groomFamilyNames: ['Maheshbhai Patel', 'Anitaben Patel'],
     },
     venue: {
       title: 'THE CELEBRATION WILL TAKE PLACE',
@@ -225,7 +225,7 @@ export const COPY: Record<Lang, Copy> = {
       brideFamilyTitle: 'Novia',
       brideFamilyNames: ['Laura Cortes Gomez'],
       groomFamilyTitle: 'Novio',
-      groomFamilyNames: ['Maheshbhai Patel', 'Anitaben Patel', 'Pinalkumari Patel'],
+      groomFamilyNames: ['Maheshbhai Patel', 'Anitaben Patel'],
     },
     venue: {
       title: 'LA CELEBRACIÓN TENDRÁ LUGAR',
