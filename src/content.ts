@@ -116,9 +116,9 @@ export const COPY: Record<Lang, Copy> = {
       units: { days: 'DAYS', hours: 'HOURS', minutes: 'MIN', seconds: 'SEC' },
     },
     afterCountdown: {
-      title: 'Together with our families',
-      welcome1: 'Our families mean the world to us—and we’re so grateful they’ll be by our side as we say “I do.”',
-      welcome2: 'With their love and support, we welcome you to celebrate this day with us.',
+      title: 'With our families',
+      welcome1: 'We are so happy to begin this new chapter together, surrounded by the people who shaped us.',
+      welcome2: 'With love and gratitude, we welcome you into this celebration of our marriage.',
       brideFamilyTitle: "Jennifer's family",
       brideFamilyNames: ['Laura Cortes Gomez'],
       groomFamilyTitle: "Milan's family",
@@ -218,10 +218,10 @@ export const COPY: Record<Lang, Copy> = {
       units: { days: 'DÍAS', hours: 'HORAS', minutes: 'MIN', seconds: 'SEG' },
     },
     afterCountdown: {
-      title: 'Junto a nuestras familias',
+      title: 'Con nuestras familias',
       welcome1:
-        'Nuestras familias lo son todo para nosotros, y estamos muy agradecidos de que nos acompañen en este “sí, quiero”.',
-      welcome2: 'Con su cariño y su apoyo, les damos la bienvenida a celebrar este día con nosotros.',
+        'Estamos muy felices de comenzar este nuevo capítulo juntos, rodeados de las personas que nos formaron.',
+      welcome2: 'Con amor y gratitud, les damos la bienvenida a esta celebración de nuestro matrimonio.',
       brideFamilyTitle: 'Familia de Jennifer',
       brideFamilyNames: ['Laura Cortes Gomez'],
       groomFamilyTitle: 'Familia de Milan',
