@@ -1029,16 +1029,32 @@ function GiftsSection({ t }: { t: (typeof COPY)[Lang] }) {
   )
 }
 
-// Matches `milanpatel98/wedding-card` (`src/InvitationCard.jsx` → `addToCalendar`) exactly.
 function buildWeddingCardIcs() {
   return [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
     'PRODID:-//Milan & Jennifer Wedding//EN',
+    'BEGIN:VTIMEZONE',
+    'TZID:America/Los_Angeles',
+    'BEGIN:DAYLIGHT',
+    'TZOFFSETFROM:-0800',
+    'TZOFFSETTO:-0700',
+    'TZNAME:PDT',
+    'DTSTART:19700308T020000',
+    'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU',
+    'END:DAYLIGHT',
+    'BEGIN:STANDARD',
+    'TZOFFSETFROM:-0700',
+    'TZOFFSETTO:-0800',
+    'TZNAME:PST',
+    'DTSTART:19701101T020000',
+    'RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU',
+    'END:STANDARD',
+    'END:VTIMEZONE',
     // Ceremony
     'BEGIN:VEVENT',
-    'DTSTART:20260606T130000',
-    'DTEND:20260606T150000',
+    'DTSTART;TZID=America/Los_Angeles:20260606T130000',
+    'DTEND;TZID=America/Los_Angeles:20260606T150000',
     "SUMMARY:Jennifer & Milan's Wedding Ceremony",
     'LOCATION:St Thomas Church\\, 1450 S Melrose Dr\\, Oceanside\\, CA 92056',
     'DESCRIPTION:Please join us for the wedding of Jennifer Huitron and Milan Patel. Kindly RSVP by May 30th · 2026.',
@@ -1046,8 +1062,8 @@ function buildWeddingCardIcs() {
     'END:VEVENT',
     // Reception
     'BEGIN:VEVENT',
-    'DTSTART:20260606T163000',
-    'DTEND:20260606T233000',
+    'DTSTART;TZID=America/Los_Angeles:20260606T163000',
+    'DTEND;TZID=America/Los_Angeles:20260606T233000',
     "SUMMARY:Jennifer & Milan's Wedding Reception",
     'LOCATION:Aria Event Hall\\, 740 Nordahl Rd Ste 125\\, San Marcos\\, CA 92069',
     'DESCRIPTION:Reception following the wedding ceremony of Jennifer Huitron and Milan Patel.',
