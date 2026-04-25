@@ -852,17 +852,17 @@ function PostCountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
         <p className="font-body text-[13px] leading-7 opacity-90 md:text-[15px] md:leading-8">{t.afterCountdown.welcome2}</p>
       </FadeIn>
 
-      <FadeIn delay={0.34} className="mt-12 md:mt-16">
-        <div className="mx-auto flex max-w-4xl flex-col items-center gap-12 md:flex-row md:items-start md:justify-center md:gap-5 lg:gap-10">
-          <div className="w-full max-w-sm text-center md:max-w-[min(42%,18rem)] md:flex-1 md:text-right">
-            <div className="font-script text-3xl leading-tight text-[color:var(--brown)] md:text-4xl">
+      <FadeIn delay={0.34} className="mt-10 md:mt-14">
+        <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 md:flex-row md:items-center md:justify-center md:gap-4 lg:gap-8">
+          <div className="w-full max-w-[15rem] text-center md:max-w-[min(38%,16rem)] md:flex-1 md:text-right">
+            <div className="font-display text-[11px] font-semibold tracking-[0.2em] text-[color:var(--brown)] opacity-60 md:text-xs">
               {t.afterCountdown.brideFamilyTitle}
             </div>
-            <div className="mt-6 space-y-4 md:mt-7 md:space-y-5">
+            <div className="mt-3 space-y-1 md:mt-3.5 md:space-y-1.5">
               {t.afterCountdown.brideFamilyNames.map((name, idx) => (
                 <div
                   key={`${name}-${idx}`}
-                  className="font-display text-xl font-medium leading-snug text-[color:var(--brown)] md:text-2xl md:leading-snug"
+                  className="font-names text-[1.65rem] leading-[0.98] text-[color:var(--brown)] md:text-[1.85rem] lg:text-[2.1rem]"
                 >
                   {name}
                 </div>
@@ -871,21 +871,21 @@ function PostCountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
           </div>
 
           <div
-            className="shrink-0 font-script text-5xl leading-none text-[color:var(--brown)] opacity-[0.38] md:mt-[4.25rem] md:text-6xl lg:text-7xl"
+            className="shrink-0 font-script text-[2.75rem] leading-none text-[color:var(--brown)] opacity-[0.38] md:text-6xl lg:text-7xl"
             aria-hidden
           >
             &amp;
           </div>
 
-          <div className="w-full max-w-sm text-center md:max-w-[min(42%,20rem)] md:flex-1 md:text-left">
-            <div className="font-script text-3xl leading-tight text-[color:var(--brown)] md:text-4xl">
+          <div className="w-full max-w-[15rem] text-center md:max-w-[min(38%,17rem)] md:flex-1 md:text-left">
+            <div className="font-display text-[11px] font-semibold tracking-[0.2em] text-[color:var(--brown)] opacity-60 md:text-xs">
               {t.afterCountdown.groomFamilyTitle}
             </div>
-            <div className="mt-6 space-y-4 md:mt-7 md:space-y-5">
+            <div className="mt-3 space-y-1 md:mt-3.5 md:space-y-1.5">
               {t.afterCountdown.groomFamilyNames.map((name, idx) => (
                 <div
                   key={`${name}-${idx}`}
-                  className="font-display text-xl font-medium leading-snug text-[color:var(--brown)] md:text-2xl md:leading-snug"
+                  className="font-names text-[1.65rem] leading-[0.98] text-[color:var(--brown)] md:text-[1.85rem] lg:text-[2.1rem]"
                 >
                   {name}
                 </div>

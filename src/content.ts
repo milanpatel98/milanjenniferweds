@@ -119,9 +119,9 @@ export const COPY: Record<Lang, Copy> = {
       title: 'With our families',
       welcome1: 'We are so happy to begin this new chapter together, surrounded by the people who shaped us.',
       welcome2: 'With love and gratitude, we welcome you into this celebration of our marriage.',
-      brideFamilyTitle: "Jennifer's family",
+      brideFamilyTitle: 'Jennifer',
       brideFamilyNames: ['Laura Cortes Gomez'],
-      groomFamilyTitle: "Milan's family",
+      groomFamilyTitle: 'Milan',
       groomFamilyNames: ['Maheshbhai Patel', 'Anitaben Patel', 'Pinalkumari Patel'],
     },
     venue: {
@@ -222,9 +222,9 @@ export const COPY: Record<Lang, Copy> = {
       welcome1:
         'Estamos muy felices de comenzar este nuevo capítulo juntos, rodeados de las personas que nos formaron.',
       welcome2: 'Con amor y gratitud, les damos la bienvenida a esta celebración de nuestro matrimonio.',
-      brideFamilyTitle: 'Familia de Jennifer',
+      brideFamilyTitle: 'Novia',
       brideFamilyNames: ['Laura Cortes Gomez'],
-      groomFamilyTitle: 'Familia de Milan',
+      groomFamilyTitle: 'Novio',
       groomFamilyNames: ['Maheshbhai Patel', 'Anitaben Patel', 'Pinalkumari Patel'],
     },
     venue: {
