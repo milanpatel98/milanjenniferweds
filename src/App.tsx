@@ -841,7 +841,7 @@ function CountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
 
 function PostCountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
   return (
-    <div className="mx-auto mt-20 max-w-4xl text-center md:mt-24">
+    <div className="mx-auto mt-24 max-w-4xl text-center md:mt-32">
       <FadeIn delay={0.15}>
         <div className="font-script text-4xl md:text-5xl">{t.afterCountdown.title}</div>
       </FadeIn>
