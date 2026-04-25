@@ -841,7 +841,7 @@ function CountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
 
 function PostCountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
   return (
-    <div className="mx-auto mt-14 max-w-3xl text-center md:mt-16">
+    <div className="mx-auto mt-14 max-w-4xl text-center md:mt-16">
       <FadeIn delay={0.15}>
         <div className="font-script text-4xl md:text-5xl">{t.afterCountdown.title}</div>
       </FadeIn>
@@ -852,23 +852,33 @@ function PostCountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
         <p className="font-body text-[13px] leading-7 opacity-90 md:text-[15px] md:leading-8">{t.afterCountdown.welcome2}</p>
       </FadeIn>
 
-      <FadeIn delay={0.34} className="mt-10">
-        <div className="grid gap-8 text-left md:grid-cols-2 md:gap-10">
-          <div className="rounded-2xl border border-[color:var(--brown-15)] bg-white/45 px-5 py-5 backdrop-blur md:px-6 md:py-6">
-            <div className="font-display text-[10px] font-bold tracking-[0.28em] text-[color:var(--brown)] opacity-90 md:text-[11px]">
+      <FadeIn delay={0.34} className="mt-12 md:mt-14">
+        <div className="mx-auto grid max-w-3xl gap-10 md:grid-cols-2 md:gap-14">
+          <div className="text-center md:text-right">
+            <div className="font-display text-[10px] font-bold tracking-[0.34em] text-[color:var(--brown)] opacity-85 md:text-[11px]">
               {t.afterCountdown.brideFamilyTitle}
             </div>
-            <div className="mt-3 whitespace-pre-line font-body text-[13px] leading-7 opacity-90 md:text-[15px] md:leading-8">
-              {t.afterCountdown.brideFamilyNames}
+            <div className="mx-auto mt-5 h-px w-16 bg-[color:var(--brown-15)] md:ml-auto md:mr-0" />
+            <div className="mt-6 space-y-4">
+              {t.afterCountdown.brideFamilyNames.map((name, idx) => (
+                <div key={`${name}-${idx}`} className="font-names text-2xl leading-snug text-[color:var(--brown)] md:text-3xl">
+                  {name}
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="rounded-2xl border border-[color:var(--brown-15)] bg-white/45 px-5 py-5 backdrop-blur md:px-6 md:py-6">
-            <div className="font-display text-[10px] font-bold tracking-[0.28em] text-[color:var(--brown)] opacity-90 md:text-[11px]">
+          <div className="text-center md:text-left">
+            <div className="font-display text-[10px] font-bold tracking-[0.34em] text-[color:var(--brown)] opacity-85 md:text-[11px]">
               {t.afterCountdown.groomFamilyTitle}
             </div>
-            <div className="mt-3 whitespace-pre-line font-body text-[13px] leading-7 opacity-90 md:text-[15px] md:leading-8">
-              {t.afterCountdown.groomFamilyNames}
+            <div className="mx-auto mt-5 h-px w-16 bg-[color:var(--brown-15)] md:ml-0 md:mr-auto" />
+            <div className="mt-6 space-y-4">
+              {t.afterCountdown.groomFamilyNames.map((name, idx) => (
+                <div key={`${name}-${idx}`} className="font-names text-2xl leading-snug text-[color:var(--brown)] md:text-3xl">
+                  {name}
+                </div>
+              ))}
             </div>
           </div>
         </div>
