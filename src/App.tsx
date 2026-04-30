@@ -779,7 +779,6 @@ function RevealSection({
         {showCountdown && (
           <div className="mt-48 md:mt-64 lg:mt-72">
             <CountdownSection t={t} />
-            <PostCountdownSection t={t} />
           </div>
         )}
       </div>
@@ -839,64 +838,6 @@ function CountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
   )
 }
 
-function PostCountdownSection({ t }: { t: (typeof COPY)[Lang] }) {
-  return (
-    <div className="mx-auto mt-24 max-w-4xl text-center md:mt-32">
-      <FadeIn delay={0.15}>
-        <div className="font-script text-4xl md:text-5xl">{t.afterCountdown.title}</div>
-      </FadeIn>
-      <FadeIn delay={0.22} className="mt-5">
-        <p className="font-body text-[13px] leading-7 opacity-90 md:text-[15px] md:leading-8">{t.afterCountdown.welcome1}</p>
-      </FadeIn>
-      <FadeIn delay={0.28} className="mt-3">
-        <p className="font-body text-[13px] leading-7 opacity-90 md:text-[15px] md:leading-8">{t.afterCountdown.welcome2}</p>
-      </FadeIn>
-
-      <FadeIn delay={0.34} className="mt-10 md:mt-14">
-        <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 md:flex-row md:items-center md:justify-center md:gap-4 lg:gap-8">
-          <div className="w-full max-w-[15rem] text-center md:max-w-[min(38%,16rem)] md:flex-1 md:text-right">
-            <div className="font-display text-[11px] font-semibold tracking-[0.2em] text-[color:var(--brown)] opacity-60 md:text-xs">
-              {t.afterCountdown.brideFamilyTitle}
-            </div>
-            <div className="mt-3 space-y-1 md:mt-3.5 md:space-y-1.5">
-              {t.afterCountdown.brideFamilyNames.map((name, idx) => (
-                <div
-                  key={`${name}-${idx}`}
-                  className="font-names text-[1.65rem] leading-[0.98] text-[color:var(--brown)] md:text-[1.85rem] lg:text-[2.1rem]"
-                >
-                  {name}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div
-            className="shrink-0 font-script text-[2.75rem] leading-none text-[color:var(--brown)] opacity-[0.38] md:text-6xl lg:text-7xl"
-            aria-hidden
-          >
-            &amp;
-          </div>
-
-          <div className="w-full max-w-[15rem] text-center md:max-w-[min(38%,17rem)] md:flex-1 md:text-left">
-            <div className="font-display text-[11px] font-semibold tracking-[0.2em] text-[color:var(--brown)] opacity-60 md:text-xs">
-              {t.afterCountdown.groomFamilyTitle}
-            </div>
-            <div className="mt-3 space-y-1 md:mt-3.5 md:space-y-1.5">
-              {t.afterCountdown.groomFamilyNames.map((name, idx) => (
-                <div
-                  key={`${name}-${idx}`}
-                  className="font-names text-[1.65rem] leading-[0.98] text-[color:var(--brown)] md:text-[1.85rem] lg:text-[2.1rem]"
-                >
-                  {name}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </FadeIn>
-    </div>
-  )
-}
 
 function VenueSection({ t }: { t: (typeof COPY)[Lang] }) {
   return (
